@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddController">
+  <items>
+      <SplitPane dividerPositions="0.4986072423398329" orientation="VERTICAL" prefHeight="718.0" prefWidth="334.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="459.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TextField fx:id="addIDTxtField" layoutX="48.0" layoutY="53.0" onAction="#onActionAddIDTxtField" prefHeight="25.0" prefWidth="135.0" promptText="ID is auto-incremented" />
+                        <ComboBox fx:id="addContactComboBox1" layoutX="410.0" layoutY="584.0" onAction="#onActionAddContactComboBox" prefHeight="25.0" prefWidth="300.0" promptText="Contact" />
+                        <Label fx:id="addIDLabel" layoutX="48.0" layoutY="32.0" text="Label" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="addUserComboBox1" layoutX="410.0" layoutY="520.0" onAction="#onActionAddUserComboBox" prefHeight="25.0" prefWidth="300.0" promptText="User" />
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="addCustomerNameTxtField" layoutX="50.0" layoutY="102.0" onAction="#onActionAddCustomerNameTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Customer Name" />
+                  <TextField fx:id="addTitleTxtField" layoutX="50.0" layoutY="148.0" onAction="#onActionAddTitleTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Title" />
+                  <TextField fx:id="addTypeTxtField" layoutX="50.0" layoutY="192.0" onAction="#onActionAddTypeTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Type" />
+                  <DatePicker fx:id="addApptDatePicker" layoutX="51.0" layoutY="246.0" onAction="#onActionAddApptDatePicker" prefWidth="98.0" promptText="Appt Date" />
+                  <ComboBox fx:id="addStartComboBox" layoutX="158.0" layoutY="246.0" onAction="#onActionAddStartComboBox" prefHeight="25.0" prefWidth="96.0" promptText="Start Time" />
+                  <Label fx:id="addTimesLabel" layoutX="149.0" layoutY="225.0" prefHeight="21.0" prefWidth="200.0" text="All times are EST" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="addEndComboBox" layoutX="263.0" layoutY="246.0" onAction="#onActionAddEndComboBox" prefHeight="25.0" prefWidth="96.0" promptText="End Time" />
+                  <TextField fx:id="addAddressTxtField" layoutX="400.0" layoutY="102.0" onAction="#onActionAddAddressTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Address" />
+                  <ComboBox fx:id="addCountryComboBox" layoutX="400.0" layoutY="148.0" onAction="#onActionAddCountryComboBox" prefHeight="25.0" prefWidth="300.0" promptText="Country" visibleRowCount="3" />
+                  <ComboBox fx:id="addStateProvinceComboBox" layoutX="400.0" layoutY="192.0" onAction="#onActionAddStateProvinceComboBox" prefHeight="25.0" prefWidth="300.0" promptText="State/Province" />
+                  <TextField fx:id="addPostalTxtField" layoutX="400.0" layoutY="234.0" onAction="#onActionAddPostalTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Postal Code" />
+                  <TextField fx:id="addDescriptTxtField" layoutX="741.0" layoutY="102.0" onAction="#onActionAddDescriptTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Description" />
+                  <TextField fx:id="addPhoneTxtField" layoutX="400.0" layoutY="277.0" onAction="#onActionAddPhoneTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Phone" />
+                  <ComboBox fx:id="addUserComboBox" layoutX="741.0" layoutY="148.0" onAction="#onActionAddUserComboBox" prefHeight="25.0" prefWidth="135.0" promptText="User" />
+                  <ComboBox fx:id="addContactComboBox" layoutX="741.0" layoutY="192.0" onAction="#onActionAddContactComboBox" prefHeight="25.0" prefWidth="135.0" promptText="Contact" />
+                  <TextField fx:id="addLocationTxtField" layoutX="741.0" layoutY="234.0" onAction="#onActionAddLocationTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Location" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="318.0">
+               <children>
+                <AnchorPane layoutX="-1.0" layoutY="-14.0" minHeight="0.0" minWidth="0.0" prefHeight="556.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;">
+                     <children>
+                        <ImageView fx:id="addOuijaIconImageView" fitHeight="216.0" fitWidth="200.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/images/set-ouija-board-illustration_150826-120.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="addGlobConsLabel" layoutX="196.0" layoutY="85.0" text="Global&#10;Consultants" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="Copperplate Gothic Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="applyAddBtn" layoutX="741.0" layoutY="85.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionApplyAddBtn" prefHeight="25.0" prefWidth="135.0" text="APPLY ADD" />
+                        <Button fx:id="applyHomeBtn" layoutX="405.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionApplyHomeBtn" prefHeight="25.0" prefWidth="135.0" text="HOME" />
+                        <Button fx:id="addClearBtn" layoutX="741.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionAddClearBtn" prefHeight="25.0" prefWidth="135.0" text="CLEAR" />
+                        <ComboBox fx:id="addSelectCustomerComboBox" layoutX="405.0" layoutY="150.0" onAction="#onActionAddSelectCustomerComboBox" prefHeight="25.0" prefWidth="135.0" promptText="SELECT Customer" />
+                        <ComboBox fx:id="addChooseComboBox" layoutX="405.0" layoutY="85.0" onAction="#onActionAddChooseComboBox" prefHeight="25.0" prefWidth="135.0" promptText="CHOOSE" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+  </items>
+</SplitPane>

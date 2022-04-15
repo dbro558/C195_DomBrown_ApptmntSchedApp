@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MonthlyApptsController">
+   <children>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TableView fx:id="moScreenTableView" prefHeight="720.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="moTVApptIDColumn" prefWidth="57.0" text="Appt ID" />
+                        <TableColumn fx:id="moTVTitleColumn" prefWidth="93.0" text="Title" />
+                        <TableColumn fx:id="moTVDescriptColumn" prefWidth="136.0" text="Description" />
+                        <TableColumn fx:id="moTVLocColumn" prefWidth="137.0" text="Location" />
+                        <TableColumn fx:id="moTVContactColumn" prefWidth="116.0" text="Contact" />
+                        <TableColumn fx:id="moTVTypeColumn" prefWidth="123.0" text="Type" />
+                        <TableColumn fx:id="moTVStartColumn" prefWidth="128.0" text="Start" />
+                        <TableColumn fx:id="moTVEndColumn" prefWidth="128.0" text="End" />
+                        <TableColumn fx:id="moTVCustIDColumn" prefWidth="92.0" text="Customer ID" />
+                        <TableColumn fx:id="moTVUserIDColumn" prefWidth="68.0" text="User ID" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <ImageView fitHeight="216.0" fitWidth="200.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/set-ouija-board-illustration_150826-120.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="moGlobConsLabel" layoutX="193.0" layoutY="46.0" text="Global&#10;Consultants" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nowViewingMoLabel" layoutX="402.0" layoutY="10.0" text="Select a year and month&#10; to view appointments&#10;from that year and month" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="moHomeBtn" layoutX="442.0" layoutY="296.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionMoHomeBtn" prefHeight="25.0" prefWidth="150.0" text="HOME" />
+                  <ComboBox fx:id="MoMonthCombo" layoutX="541.0" layoutY="110.0" onAction="#onActionMoMonthCombo" prefHeight="25.0" prefWidth="89.0" promptText="Month" />
+                  <ComboBox fx:id="moYearCombo" layoutX="398.0" layoutY="110.0" onAction="#onActionMoYearCombo" prefHeight="25.0" prefWidth="89.0" promptText="Year" />
+                  <Button fx:id="moGetApptsBtn" layoutX="442.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionMoGetApptsBtn" prefHeight="25.0" prefWidth="150.0" text="Get Appointments" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

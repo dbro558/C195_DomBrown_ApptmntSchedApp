@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateController">
+   <items>
+      <SplitPane dividerPositions="0.3788300835654596" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <TableView fx:id="updateCustTableView" prefHeight="87.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="updateCustCustomerIDColumn" prefWidth="75.0" text="Customer ID" />
+                        <TableColumn fx:id="updateCustCustomerNameColumn" prefWidth="158.0" text="Customer Name" />
+                        <TableColumn fx:id="updateCustAddressColumn" prefWidth="314.0" text="Address" />
+                        <TableColumn fx:id="updateCustFLDivisionColumn" prefWidth="245.0" text="State/Province" />
+                        <TableColumn fx:id="updateCustPhoneColumn" prefWidth="160.0" text="Phone" />
+                        <TableColumn fx:id="updateCustPostalColumn" prefWidth="130.0" text="Postal" />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="updateApptTableView" layoutY="87.0" prefHeight="182.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="updateApptIDColumn" prefWidth="60.0" text="Appt ID" />
+                        <TableColumn fx:id="updateTitleColumn" prefWidth="78.0" text="Title" />
+                        <TableColumn fx:id="updateDescriptionColumn" prefWidth="180.0" text="Description" />
+                        <TableColumn fx:id="updateLocationColumn" prefWidth="150.0" text="Location" />
+                        <TableColumn fx:id="updateTypeColumn" prefWidth="130.0" text="Type" />
+                        <TableColumn fx:id="updateStartColumn" prefWidth="130.0" text="Start" />
+                        <TableColumn fx:id="updateEndColumn" prefWidth="130.0" text="End" />
+                        <TableColumn fx:id="updateContactColumn" prefWidth="129.0" text="Contact" />
+                        <TableColumn fx:id="updateCustomerColumn" prefWidth="98.0" text="Customer" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <ImageView fx:id="updateOuijaIconImageView" fitHeight="216.0" fitWidth="200.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/set-ouija-board-illustration_150826-120.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="updateGlobConsLabel" layoutX="193.0" layoutY="55.0" text="Global&#10;Consultants" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="updateHomeBtn" layoutX="21.0" layoutY="389.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionUpdateHomeBtn" prefHeight="25.0" prefWidth="150.0" text="HOME" />
+                  <Button fx:id="applyUpdateBtn" layoutX="432.0" layoutY="389.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionApplyUpdateBtn" prefHeight="25.0" prefWidth="150.0" text="APPLY UPDATE" />
+                  <Button fx:id="updateClearBtn" layoutX="193.0" layoutY="389.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionUpdateClearBtn" prefHeight="25.0" prefWidth="150.0" text="CLEAR" />
+                  <ComboBox fx:id="updateChooseComboBox" layoutX="171.0" layoutY="239.0" onAction="#onActionUpdateChooseComboBox" prefWidth="150.0" promptText="CHOOSE" />
+                  <TextField fx:id="updateIDTxtField" layoutX="433.0" layoutY="35.0" onAction="#onActionUpdateIDTxtField" promptText="ID" />
+                  <TextField fx:id="updateCustomerNameTxtField" layoutX="431.0" layoutY="96.0" onAction="#onActionUpdateCustomerNameTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Customer Name" />
+                  <TextField fx:id="updateTitleTxtField" layoutX="431.0" layoutY="141.0" onAction="#onActionUpdateTitleTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Title" />
+                  <TextField fx:id="updateTypeTxtField" layoutX="431.0" layoutY="182.0" onAction="#onActionUpdateTypeTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Type" />
+                  <ComboBox fx:id="updateStartComboBox" layoutX="533.0" layoutY="264.0" onAction="#onActionUpdateStartComboBox" prefHeight="25.0" prefWidth="96.0" promptText="Start Time" />
+                  <ComboBox fx:id="updateEndComboBox" layoutX="635.0" layoutY="264.0" onAction="#onActionUpdateEndComboBox" prefHeight="25.0" prefWidth="96.0" promptText="End Time" />
+                  <DatePicker fx:id="updateApptDatePicker" layoutX="431.0" layoutY="264.0" onAction="#onActionUpdateApptDatePicker" prefWidth="98.0" promptText="Appt Date" />
+                  <Label fx:id="updateIDLabel" layoutX="432.0" layoutY="14.0" prefHeight="21.0" prefWidth="52.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="updateAddressTxtField" layoutX="746.0" layoutY="96.0" onAction="#onActionUpdateAddressTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Address" />
+                  <TextField fx:id="updatePostalTxtField" layoutX="746.0" layoutY="141.0" onAction="#onActionUpdatePostalTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Postal Code" />
+                  <TextField fx:id="updatePhoneTxtField" layoutX="746.0" layoutY="182.0" onAction="#onActionUpdatePhoneTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Phone" />
+                  <ComboBox fx:id="updateContactComboBox" layoutX="746.0" layoutY="303.0" onAction="#onActionUpdateContactComboBox" prefHeight="25.0" prefWidth="140.0" promptText="Contact" />
+                  <ComboBox fx:id="updateUserComboBox" layoutX="906.0" layoutY="227.0" onAction="#onActionUpdateUserComboBox" prefHeight="25.0" prefWidth="140.0" promptText="User" />
+                  <TextField fx:id="updateContactTxtField" layoutX="746.0" layoutY="338.0" onAction="#onActionUpdateContactTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Current Contact" />
+                  <TextField fx:id="updateUserTxtField" layoutX="746.0" layoutY="264.0" onAction="#onActionUpdateUserTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Current User" />
+                  <ComboBox fx:id="updateCountryComboBox" layoutX="746.0" layoutY="23.0" onAction="#onActionUpdateCountryComboBox" prefHeight="25.0" prefWidth="300.0" promptText="Select Country" />
+                  <ComboBox fx:id="updateStateProvinceComboBox" layoutX="746.0" layoutY="60.0" onAction="#onActionUpdateStateProvinceComboBox" prefHeight="25.0" prefWidth="300.0" promptText="Select State/Province" />
+                  <TextField fx:id="updateDescriptionTxtField" layoutX="746.0" layoutY="389.0" onAction="#onActionUpdateDescriptionTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Current Description" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </items>
+</SplitPane>

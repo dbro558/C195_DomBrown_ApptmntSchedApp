@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WeeklyApptsController">
+   <children>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TableView fx:id="weeklyScreenTableView" prefHeight="720.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="wklyTVApptIDColumn" prefWidth="57.0" text="Appt ID" />
+                        <TableColumn fx:id="wklyTVTitleColumn" prefWidth="93.0" text="Title" />
+                        <TableColumn fx:id="wklyTVDescriptColumn" prefWidth="136.0" text="Description" />
+                        <TableColumn fx:id="wklyTVLocColumn" prefWidth="137.0" text="Location" />
+                        <TableColumn fx:id="wklyTVContactColumn" prefWidth="116.0" text="Contact" />
+                        <TableColumn fx:id="wklyTVTypeColumn" prefWidth="123.0" text="Type" />
+                        <TableColumn fx:id="wklyTVStartColumn" prefWidth="128.0" text="Start" />
+                        <TableColumn fx:id="wklyTVEndColumn" prefWidth="128.0" text="End" />
+                        <TableColumn fx:id="wklyTVCustIDColumn" prefWidth="92.0" text="Customer ID" />
+                        <TableColumn fx:id="wklyTVUserIDColumn" prefWidth="68.0" text="User ID" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <ImageView fitHeight="216.0" fitWidth="200.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/set-ouija-board-illustration_150826-120.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="wklyGlobConsLabel" layoutX="193.0" layoutY="46.0" text="Global&#10;Consultants" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nowViewingWklyLabel" layoutX="417.0" layoutY="10.0" text="Select a date&#10;to view appointments&#10;from the week&#10;starting with that date" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="wklyHomeBtn" layoutX="442.0" layoutY="304.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionWklyHomeBtn" prefHeight="25.0" prefWidth="150.0" text="HOME" />
+                  <DatePicker fx:id="wklyDatePicker" layoutX="431.0" layoutY="96.0" onAction="#onActionWklyDatePicker" promptText="Select a date" />
+                  <Button fx:id="wklyGetApptsBtn" layoutX="442.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionWklyGetApptsBtn" prefHeight="25.0" prefWidth="150.0" text="Get Appointments" />
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

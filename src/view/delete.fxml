@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DeleteController">
+   <items>
+      <SplitPane dividerPositions="0.4206128133704735" orientation="VERTICAL" prefHeight="720.0" prefWidth="1080.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <TableView fx:id="deleteCustTableView" prefHeight="58.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="deleteCustCustomerIDColumn" prefWidth="75.0" text="Customer ID" />
+                        <TableColumn fx:id="deleteCustCustomerNameColumn" prefWidth="182.0" text="Customer Name" />
+                        <TableColumn fx:id="deleteCustAddressColumn" prefWidth="224.0" text="Address" />
+                        <TableColumn fx:id="deleteCustFLDivisionColumn" prefWidth="206.0" text="State/Province" />
+                        <TableColumn fx:id="deleteCustCountryColumn" prefWidth="134.0" text="Country" />
+                        <TableColumn fx:id="deleteCustPhoneColumn" prefWidth="155.0" text="Phone" />
+                        <TableColumn fx:id="deleteCustPostalColumn" prefWidth="101.0" text="Postal" />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="deleteTableView" layoutY="67.0" prefHeight="233.0" prefWidth="1078.0">
+                     <columns>
+                        <TableColumn fx:id="deleteApptIDColumn" prefWidth="60.0" text="Appt ID" />
+                        <TableColumn fx:id="deleteTitleColumn" prefWidth="95.0" text="Title" />
+                        <TableColumn fx:id="deleteDescriptionColumn" prefWidth="191.0" text="Description" />
+                        <TableColumn fx:id="deleteLocationColumn" prefWidth="169.0" text="Location" />
+                        <TableColumn fx:id="deleteStartColumn" prefWidth="150.0" text="Start" />
+                        <TableColumn fx:id="deleteEndColumn" prefWidth="150.0" text="End" />
+                        <TableColumn fx:id="deleteTypeColumn" prefWidth="143.0" text="Type" />
+                        <TableColumn fx:id="deleteContactColumn" prefWidth="121.0" text="Contact" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
+               <children>
+                  <TextField fx:id="deleteIDTxtField" layoutX="369.0" layoutY="61.0" onAction="#onActionDeleteIDTxtField" prefHeight="25.0" prefWidth="44.0" promptText="ID" />
+                  <TextField fx:id="deleteCustomerNameTxtField" layoutX="439.0" layoutY="22.0" onAction="#onActionDeleteCustomerNameTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Customer Name" />
+                  <TextField fx:id="deleteAddressTxtField" layoutX="752.0" layoutY="22.0" onAction="#onActionDeleteAddressTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Address" />
+                  <TextField fx:id="deleteTitleTxtField" layoutX="439.0" layoutY="61.0" onAction="#onActionDeleteTitleTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Title" />
+                  <TextField fx:id="deleteTypeTxtField" layoutX="439.0" layoutY="104.0" onAction="#onActionDeleteTypeTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Type" />
+                  <TextField fx:id="deletePostalTxtField" layoutX="752.0" layoutY="142.0" onAction="#onActionDeletePostalTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Postal Code" />
+                  <TextField fx:id="deletePhoneTxtField" layoutX="752.0" layoutY="187.0" onAction="#onActionDeletePhoneTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Phone" />
+                  <TextArea fx:id="deleteDescriptionTxtArea" layoutX="752.0" layoutY="229.0" prefHeight="58.0" prefWidth="300.0" promptText="Description" />
+                  <TextField fx:id="deleteCountryTxtField" layoutX="752.0" layoutY="61.0" onAction="#onActionDeleteCountryTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Country" />
+                  <TextField fx:id="deleteStateProvinceTxtField" layoutX="752.0" layoutY="105.0" onAction="#onActionDeleteStateProvinceTxtField" prefHeight="25.0" prefWidth="300.0" promptText="State/Province" />
+                  <Label fx:id="deleteIDLabel" layoutX="284.0" layoutY="37.0" prefHeight="21.0" prefWidth="130.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="deleteContactTxtField" layoutX="439.0" layoutY="187.0" onAction="#onActionDeleteContactTxtField" prefHeight="25.0" prefWidth="300.0" promptText="Contact" />
+                  <TextField fx:id="deleteStartTxtField" layoutX="439.0" layoutY="143.0" onAction="#onActionDeleteStartTxtField" prefHeight="25.0" prefWidth="145.0" promptText="Appointment Start" />
+                  <TextField fx:id="deleteEndTxtField" layoutX="589.0" layoutY="143.0" onAction="#onActionDeleteEndTxtField" prefHeight="25.0" prefWidth="145.0" promptText="Appointment End" />
+                  <ImageView fx:id="deleteOuijaIconImageView" fitHeight="171.0" fitWidth="175.0" layoutY="5.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/set-ouija-board-illustration_150826-120.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="deleteGlobConsLabel" layoutX="145.0" layoutY="47.0" text="Global&#10;Consultants" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="applyDeleteBtn" layoutX="509.0" layoutY="363.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionApplyDeleteBtn" prefHeight="25.0" prefWidth="150.0" text="APPLY DELETE" />
+                  <Button fx:id="deleteHomeBtn" layoutX="26.0" layoutY="363.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionDeleteHomeBtn" prefHeight="25.0" prefWidth="150.0" text="HOME" />
+                  <Button fx:id="deleteClearBtn" layoutX="227.0" layoutY="363.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionDeleteClearBtn" prefHeight="25.0" prefWidth="150.0" text="CLEAR" />
+                  <ComboBox fx:id="deleteChooseComboBox" layoutX="227.0" layoutY="187.0" onAction="#onActionDeleteChooseComboBox" prefWidth="150.0" promptText="CHOOSE" />
+                  <ComboBox fx:id="deleteSelectCustomerComboBox" layoutX="227.0" layoutY="246.0" onAction="#onActionDeleteSelectCustomerComboBox" prefHeight="25.0" prefWidth="150.0" promptText="SELECT Customer" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </items>
+</SplitPane>
