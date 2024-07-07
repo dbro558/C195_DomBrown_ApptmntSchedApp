@@ -65,6 +65,7 @@ public class LoginController implements Initializable {
      * */
     public static Boolean apptIn15;
 
+
     /** initialize
      Initializes the stage/scene
      *
@@ -128,16 +129,17 @@ public class LoginController implements Initializable {
                             "Consultant: " + appointment.getContactName() + "\n" +
                             "Customer: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()) + "\n" +
                             "Appointment ID: " + appointment.getAppointmentID() + "\n" +
-                            "Start Date/Time: " + appointment.getStart() + "\n" +
-                            "End Date/Time: " + appointment.getEnd() + "\n" +
+                            "Start Date/Time: " + appointment.getFormattedStartString() + "\n" +
+                            "End Date/Time: " + appointment.getFormattedEndString() + "\n" +
                             "Type: " + appointment.getType() + "\n" +
                             "Description: " + appointment.getDescription() + "\n" +
                             "Location: " + appointment.getLocation());
                     alert.setContentText("Click OK to exit.");
                     alert.showAndWait();
                     System.out.println("Upcoming Appointment: " + appointment.getAppointmentID());
-                    System.out.println("with: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
-                    System.out.println("from: " + appointment.getStart() + " to " + appointment.getEnd());
+                    System.out.println("for contact: " + appointment.getContactName());
+                    System.out.println("with customer: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
+                    System.out.println("from: " + appointment.getFormattedStartString() + " to " + appointment.getFormattedEndString());
                 }
             } else {
                 Alert noUpcoming = new Alert(Alert.AlertType.INFORMATION);

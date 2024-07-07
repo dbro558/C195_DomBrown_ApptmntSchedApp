@@ -35,8 +35,8 @@ public class DBContact {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                int contactId = rs.getInt("Contact_ID");
-                String contactName = rs.getString("Contact_Name");
+                int contactId = rs.getInt("contact_id");
+                String contactName = rs.getString("contact_name");
 
                 Contact contact = new Contact();
                 contact.setContactId(contactId);
@@ -69,7 +69,7 @@ public class DBContact {
             ResultSet rs = ps.executeQuery(sql);
 
             while (rs.next()) {
-                String contact = rs.getString("Contact_Name");
+                String contact = rs.getString("contact_name");
 
                 contactNamesList.add(contact);
             }
@@ -91,13 +91,13 @@ public class DBContact {
     public static int getContactId(String contactName) {
         int contId = 0;
         try {
-            String sql = "SELECT * FROM contacts WHERE contacts.Contact_Name = ?;"; //select statement
+            String sql = "SELECT * FROM contacts WHERE contacts.contact_name = ?;"; //select statement
             PreparedStatement stmt = DatabaseConnection.getConnection().prepareStatement(sql);
             stmt.setString(1, contactName);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                contId = rs.getInt("Contact_ID");
+                contId = rs.getInt("contact_id");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -117,13 +117,13 @@ public class DBContact {
     public static String getContactName(int contactId) {
         String contName = null;
         try {
-            String sql = "SELECT * FROM contacts WHERE contacts.Contact_ID = ?;"; //select statement
+            String sql = "SELECT * FROM contacts WHERE contacts.contact_id = ?;"; //select statement
             PreparedStatement stmt = DatabaseConnection.getConnection().prepareStatement(sql);
             stmt.setInt(1, contactId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-               contName = rs.getString("Contact_Name");
+               contName = rs.getString("contact_name");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();

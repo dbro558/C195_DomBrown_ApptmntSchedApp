@@ -18,6 +18,9 @@ import model.MonthlyTypeCountReport;
 import model.VIPReport;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 /** ReportsController class
@@ -39,8 +42,8 @@ public class ReportsController implements Initializable {
     @FXML TableView<VIPReport> reportsVIPTableView;
     @FXML
     TableColumn<Appointment, String> reportsTCYearTableColumn, reportsTCMonthTableColumn, reportsTCTypeTableColumn, reportsTitleColumn,
-            reportsDescriptionColumn, reportsTypeColumn, reportsStartColumn, reportsEndColumn,
-            reportsVIPCustNameColumn;
+            reportsDescriptionColumn, reportsTypeColumn, reportsVIPCustNameColumn;
+    @FXML TableColumn<Appointment, LocalDateTime> reportsStartColumn, reportsEndColumn;
     @FXML TableColumn<Appointment, Integer> reportsTCCountTableColumn, reportsApptIDColumn, reportsVIPCustIDColumn,
             reportsVIPCountTableColumn, reportsCustIDColumn;
     @FXML
@@ -53,6 +56,9 @@ public class ReportsController implements Initializable {
     ObservableList<String> contactList = DBContact.getContactNames();
     ObservableList<Appointment> apptsByContactList = DBAppointment.getAllAppointmentsByContact(contactName);
     ObservableList<VIPReport> vipList = DBReports.getVIPReport();
+
+    //User's local time zone
+    ZoneId userZoneId = ZoneId.systemDefault();
 
 
     /** initialize
@@ -129,9 +135,39 @@ public class ReportsController implements Initializable {
                         reportsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
                         reportsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
                         reportsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-                        reportsStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-                        reportsEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
                         reportsCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+
+                        // Custom cell factories for date time columns
+                        reportsStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+                        reportsStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                            @Override
+                            protected void updateItem(LocalDateTime item, boolean empty){
+                                super.updateItem(item, empty);
+                                if (empty || item == null){
+                                    setText(null);
+                                } else {
+                                    //Convert from UTC to user's LocalDateTime
+                                    ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                                    setText(userStartZonedDateTime.format(DBAppointment.formatter));
+                                }
+                            }
+                        });
+                        reportsEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+                        reportsEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                            @Override
+                            protected void updateItem(LocalDateTime item, boolean empty){
+                                super.updateItem(item, empty);
+                                if (empty || item == null){
+                                    setText(null);
+                                } else {
+                                    //Convert from UTC to user's LocalDateTime
+                                    ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                                    setText(userEndZonedDateTime.format(DBAppointment.formatter));
+                                }
+                            }
+                        });
+
+
                         reportsApptsByContactTableView.setItems(apptsByContactList);
                     });
             reportsScheduleLabel.setText("Now viewing " + contactName + "'s schedule");
