@@ -96,7 +96,7 @@ public class DBFirstLevelDivision {
         ObservableList<String> divNamesList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 2;"; //select statement
+            String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 3;"; //select statement
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 
@@ -124,7 +124,7 @@ public class DBFirstLevelDivision {
         ObservableList<String> divNamesList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 3;"; //select statement
+            String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 2;"; //select statement
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 

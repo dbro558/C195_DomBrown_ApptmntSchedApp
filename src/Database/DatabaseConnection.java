@@ -16,14 +16,14 @@ public class DatabaseConnection {
     private static final String jdbcProtocol = "jdbc";
     private static final String jdbcVendor = ":mysql:";
     private static final String serverAndPort = "//127.0.0.1:3306/";
-    private static final String databaseName = "client_schedule";
+    private static final String databaseName = "sched_app_schema";
 
     private static final String databaseUrl = jdbcProtocol + jdbcVendor + serverAndPort + databaseName;
 
     private static final String MYSQLJDBCDRIVER = "com.mysql.jdbc.Driver";
 
-    private static final String databaseUserName = "test";
-    private static final String databaseUserPassword = "test";
+    private static final String databaseUserName = "root";
+    private static final String databaseUserPassword = "19Berwanger76!";
 
     private static Connection conn = null;
 

@@ -35,7 +35,7 @@ public class DBReports {
                     "ON customers.Customer_ID = appointments.Customer_ID\n" +
                     "WHERE MONTH(appointments.Start) = MONTH(CURRENT_DATE())\n" +
                     "AND YEAR(appointments.Start) = YEAR(CURRENT_DATE())" +
-                    "GROUP BY customers.Customer_ID, customers.Customer_Name\n" +
+                    "GROUP BY appointments.Appointment_ID, customers.Customer_ID, customers.Customer_Name\n" +
                     "ORDER BY count DESC LIMIT 10;";
             PreparedStatement stmt = DatabaseConnection.getConnection().prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();

@@ -543,7 +543,6 @@ public class AddController implements Initializable {
             //LocalTime versions of start/end combo box values
             int startInt = Integer.parseInt(addStartComboBox.getSelectionModel().getSelectedItem().toString());
             String startS = TimeControls.convertComboTimeValue(startInt);
-            System.out.println(startS);
             startTime = LocalTime.parse(startS);
             int endInt = Integer.parseInt(addEndComboBox.getSelectionModel().getSelectedItem().toString());
             String endS = TimeControls.convertComboTimeValue(endInt);
@@ -551,27 +550,38 @@ public class AddController implements Initializable {
 
             //create LocalDateTime from chosenDate and start/end times
             LocalDateTime startDateTime = LocalDateTime.of(chosenDate, startTime);
+            System.out.println("LDT startDateTime (used to compare against dbLDT in validateOverlap): " + startDateTime);
             LocalDateTime endDateTime = LocalDateTime.of(chosenDate, endTime);
+            System.out.println("LDT endDateTime (used to compare against dbLDT in validateOverlap): " + endDateTime);
 
-            //user's zoned date time
+
+            //user's time input as zoned date time
             ZonedDateTime startZDT = ZonedDateTime.of(startDateTime, ZoneId.systemDefault());
+            System.out.println("User's start ZDT: " + startZDT);
             ZonedDateTime endZDT = ZonedDateTime.of(endDateTime, ZoneId.systemDefault());
+            System.out.println("User's end ZDT: " + endZDT);
+
+            //user's time input to EST
             ZonedDateTime startInput = startZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+            System.out.println("Same start instant EST: " + startInput);
             ZonedDateTime endInput = endZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+            System.out.println("Same end instant EST: " + endInput);
+
+            //Hour values from EST version of user's input times (used to check against business hours)
             LocalTime startLT = startInput.toLocalTime();
             LocalTime endLT = endInput.toLocalTime();
-            System.out.println(startLT);
-            System.out.println(endLT);
+            System.out.println("LocalTime of EST start ZDT: " + startLT);
+            System.out.println("LocalTime of EST end ZDT: " + endLT);
 
-            //to EST
+            //Business hours
             ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
             ZonedDateTime bizEnd = ZonedDateTime.of(chosenDate, LocalTime.of(22, 0), ZoneId.of("America/New_York"));
             LocalTime bizStartLT = bizStart.toLocalTime();
             LocalTime bizEndLT = bizEnd.toLocalTime();
 
             //to UTC
-            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
 
             //get field & combo data
             String customerName = addCustomerNameTxtField.getText();
@@ -581,8 +591,8 @@ public class AddController implements Initializable {
             String description = addDescriptTxtField.getText();
             String location = addLocationTxtField.getText();
             String type = addTypeTxtField.getText();
-            String start = startUTC.toLocalDateTime().format(dtf);
-            String end = endUTC.toLocalDateTime().format(dtf);
+            LocalDateTime start = startZDT.toLocalDateTime();
+            LocalDateTime end = endZDT.toLocalDateTime();
 
             int customerId = DBCustomer.getCustomerId(customerName);
             int userId = DBUser.getUserId(userName);
@@ -602,11 +612,12 @@ public class AddController implements Initializable {
                 if (result.get() == ButtonType.OK) {
                     alert.close();
                 } else {
+
                     //... user chose CANCEL or closed the dialog
                 }
             }
 
-            overlap = validateOverlap(customerName, startDateTime, endDateTime);
+            overlap = validateOverlap(customerName, start, end);
             if (overlap) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Overlapping Appointment Error");
@@ -638,8 +649,8 @@ public class AddController implements Initializable {
                     int custId = appt.getCustomerID();
                     String custName = DBCustomer.getSingleCustomerName(custId);
                     String apptType = appt.getType();
-                    String apptStart = appt.getStart();
-                    String apptEnd = appt.getEnd();
+                    LocalDateTime apptStart = appt.getStart();
+                    LocalDateTime apptEnd = appt.getEnd();
                     Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
                     confirmation.setTitle("Confirmation");
                     confirmation.setHeaderText("A new Appointment has been successfully added to the database.\n" +
@@ -654,8 +665,10 @@ public class AddController implements Initializable {
                     if (result3.get() == ButtonType.OK) {
                         confirmation.close();
                         // ... user chose OK
+                        System.out.println("Appointment added to database.");
                     } else {
                         // ... user chose CANCEL or closed the dialog
+                        System.out.println("Operation cancelled or closed.");
                     }
                 }
             }
@@ -681,7 +694,7 @@ public class AddController implements Initializable {
             String division = addStateProvinceComboBox.getValue().toString();
             String lastUpdatedBy = User.getCurrentUser();
             String phoneNum = addPhoneTxtField.getText();
-            if (phoneNum.length() < 10 || phoneNum.length() == 11) {
+            if (phoneNum.length() < 10 || phoneNum.length() == 11 || phoneNum.length() > 12) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Phone Number Error");
                 alert.setHeaderText("U.S. and Canada phone numbers require 10 digits\n" +
@@ -699,7 +712,7 @@ public class AddController implements Initializable {
             if (postal.length() < 5) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Postal Code Error");
-                alert.setHeaderText("All postal codes must be 5 characters long.");
+                alert.setHeaderText("All U.S. postal codes must be 5 characters long.");
                 alert.showAndWait();
             }
 
@@ -781,28 +794,26 @@ public class AddController implements Initializable {
      * for the selected customer during the same time period on the same date.
      *
      * @param customerName name of customer associated with the appointment
-     * @param startDateTime the selected date and start time
-     * @param endDateTime the selected date and end time
+     * @param start the selected date and start time
+     * @param end the selected date and end time
      *
      * @return returns true if there IS an overlap with an existing appointment for this customer, else false
      *
      * */
-    public static Boolean validateOverlap(String customerName, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public static Boolean validateOverlap(String customerName, LocalDateTime start, LocalDateTime end) {
 
         ObservableList<Appointment> allAppts = DBAppointment.getAllAppointmentsByCustomer(customerName);
 
         if (!allAppts.isEmpty()) {
             for (Appointment apptmnt : allAppts) {
-                String apptStart = apptmnt.getStart();
-                String apptEnd = apptmnt.getEnd();
-                LocalDateTime dbStartLDT = LocalDateTime.parse(apptStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//start localdatetime from db
-                LocalDateTime dbEndLDT = LocalDateTime.parse(apptEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//end localdatetime from db
+                LocalDateTime dbStartLDT = apptmnt.getStart();//start localdatetime from db
+                LocalDateTime dbEndLDT = apptmnt.getEnd();//end localdatetime from db
 
 
-                if (startDateTime.isBefore(dbStartLDT) && endDateTime.isAfter(dbStartLDT)) return true;
-                if (startDateTime.isEqual(dbStartLDT) && endDateTime.isEqual(dbEndLDT)) return true;
-                if (startDateTime.isBefore(dbStartLDT) && endDateTime.isAfter(dbEndLDT)) return true;
-                if (startDateTime.isAfter(dbStartLDT) && startDateTime.isBefore(dbEndLDT)) return true;
+                if (start.isBefore(dbStartLDT) && end.isAfter(dbStartLDT)) return true;
+                if (start.isEqual(dbStartLDT) && end.isEqual(dbEndLDT)) return true;
+                if (start.isBefore(dbStartLDT) && end.isAfter(dbEndLDT)) return true;
+                if (start.isAfter(dbStartLDT) && start.isBefore(dbEndLDT)) return true;
 
             }
 

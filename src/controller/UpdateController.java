@@ -799,8 +799,6 @@ public class UpdateController implements Initializable {
             ZonedDateTime endInput = endZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
             LocalTime startLT = startInput.toLocalTime();
             LocalTime endLT = endInput.toLocalTime();
-            System.out.println("Chosen start time converted to EST: " + startLT);
-            System.out.println("Chosen end time converted to EST: " + endLT);
 
             //to EST
             ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
@@ -808,13 +806,13 @@ public class UpdateController implements Initializable {
             LocalTime bizStartLT = bizStart.toLocalTime();
             LocalTime bizEndLT = bizEnd.toLocalTime();
 
-            //to UTC
-            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneOffset.UTC);
+            //to UTC unnecessary
+            //ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
+            // ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
 
             //formatted string
-            String start = startUTC.toLocalDateTime().format(dtf);
-            String end = endUTC.toLocalDateTime().format(dtf);
+            LocalDateTime start = startZDT.toLocalDateTime();
+            LocalDateTime end = endZDT.toLocalDateTime();
 
             invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
             if (invalidBizHrs) {
@@ -914,26 +912,24 @@ public class UpdateController implements Initializable {
      * for the selected customer during the same time period on the same date.
      *
      * @param customerName name of customer associated with the appointment
-     * @param startDateTime the selected date and start time
-     * @param endDateTime the selected date and end time
+     * @param start the selected date and start time
+     * @param end the selected date and end time
      *
      * @return returns true if there IS an overlap with an existing appointment for this customer, else false
      *
      * */
-    public static Boolean validateOverlap(String customerName, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public static Boolean validateOverlap(String customerName, LocalDateTime start, LocalDateTime end) {
 
         ObservableList<Appointment> allAppts = DBAppointment.getAllAppointmentsByCustomer(customerName);
 
         if (!allAppts.isEmpty()) {
             for (Appointment apptmnt : allAppts) {
-                String apptStart = apptmnt.getStart();
-                String apptEnd = apptmnt.getEnd();
-                LocalDateTime dbStartLDT = LocalDateTime.parse(apptStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                LocalDateTime dbEndLDT = LocalDateTime.parse(apptEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                LocalDateTime dbStartLDT = apptmnt.getStart();
+                LocalDateTime dbEndLDT = apptmnt.getEnd();
 
-                if (startDateTime.isBefore(dbStartLDT) && endDateTime.isAfter(dbStartLDT)) return true;
-                if (startDateTime.isBefore(dbStartLDT) && endDateTime.isAfter(dbEndLDT)) return true;
-                if (startDateTime.isAfter(dbStartLDT) && startDateTime.isBefore(dbEndLDT)) return true;
+                if (start.isBefore(dbStartLDT) && end.isAfter(dbStartLDT)) return true;
+                if (start.isBefore(dbStartLDT) && end.isAfter(dbEndLDT)) return true;
+                if (start.isAfter(dbStartLDT) && start.isBefore(dbEndLDT)) return true;
 
             }
 

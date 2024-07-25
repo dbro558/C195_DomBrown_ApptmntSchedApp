@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 /** This class represents an appointment
  * @author Dom Brown-Gonzalez
  * @author dbro558@wgu.edu
@@ -10,8 +12,8 @@ public class Appointment {
     private int appointmentID, customerID, userID, contactID, count;
     private String description;
     private String location;
-    private String start;
-    private String end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private String title;
     private String type;
     private String customerName;
@@ -41,7 +43,7 @@ public class Appointment {
      *
      * */
     public Appointment(int appointmentID, String title, String description, String location, int contactID,
-                       String type, String start, String end, int customerID, int userID, String contactName)
+                       String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, String contactName)
     {
         this.appointmentID = appointmentID;
         this.description = description;
@@ -83,7 +85,7 @@ public class Appointment {
      *
      * */
     public Appointment(int appointmentID, String title, String description,
-                       String type, String start, String end, int customerID) {
+                       String type, LocalDateTime start, LocalDateTime end, int customerID) {
         this.appointmentID = appointmentID;
         this.description = description;
         this.title = title;
@@ -109,7 +111,7 @@ public class Appointment {
      *
      * */
     public Appointment(int appointmentId, String title, String description, String location, String type,
-                       String start, String end, int customerId, int userId, int contactId) {
+                       LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId) {
 
         this.appointmentID = appointmentId;
         this.title = title;
@@ -139,7 +141,7 @@ public class Appointment {
      *
      * */
     public Appointment(int appointmentId, String title, String description, String location, String type,
-                       String start, String end, int customerId, int userId, String contactName) {
+                       LocalDateTime start, LocalDateTime end, int customerId, int userId, String contactName) {
 
         this.appointmentID = appointmentId;
         this.title = title;
@@ -185,14 +187,14 @@ public class Appointment {
     }
 
     /** this sets the start date/time from the database
-     * @param start start date/time as a string from db*/
-    public void setStart(String start) {
+     * @param start start date/time as a LocalDateTime from db*/
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
     /** this sets the end date/time from the database
-     * @param end end date/time as a string from db*/
-    public void setEnd(String end) {
+     * @param end end date/time as a LocalDateTime from db*/
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -258,13 +260,13 @@ public class Appointment {
 
     /** start getter
      * @return returns the start date/time*/
-    public String getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
     /** end getter
      * @return returns the end date/time*/
-    public String getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 

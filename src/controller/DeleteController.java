@@ -303,6 +303,8 @@ public class DeleteController implements Initializable {
                         alert.close();
                         // ... user chose OK
                         DBAppointment.apptDelete(apptId);
+                        deleteTableView.setItems(null);
+                        populateAppointmentsTable();
                         Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                         alert1.setHeaderText("Appointment "+ deleteIDTxtField.getText() +
                                 " with type of " + deleteTypeTxtField.getText() +
@@ -436,8 +438,8 @@ public class DeleteController implements Initializable {
             deletePostalTxtField.setText(selectedAppt.getLocation());
             deleteContactTxtField.setText(selectedAppt.getContactName());
             deleteTypeTxtField.setText(selectedAppt.getType());
-            deleteStartTxtField.setText(selectedAppt.getStart());
-            deleteEndTxtField.setText(selectedAppt.getEnd());
+            deleteStartTxtField.setText(selectedAppt.getStart().toString());
+            deleteEndTxtField.setText(selectedAppt.getEnd().toString());
         }
     }
 

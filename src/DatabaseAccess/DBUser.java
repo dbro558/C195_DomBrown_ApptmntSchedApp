@@ -104,13 +104,13 @@ public class DBUser {
 
     /** getSingleUserName
      * Queries database for all data from users table.
-     * Returns a single user name, given a selected user ID.
+     * Returns a single username, given a selected user ID.
      *
      * @param userId the selected user ID
      *
-     * @return returns uName, the single user name associated with the selected user ID
+     * @return returns uName, the single username associated with the selected user ID
      */
-    //gets single user name
+    //gets single username
     public static String getSingleUserName(int userId){
         String uName = null;
         try {

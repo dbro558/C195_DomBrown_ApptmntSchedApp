@@ -10,7 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /** This class holds SQL database queries dealing directly with appointments
@@ -53,7 +56,7 @@ public class DBAppointment {
 
 
         try {
-            String sql = "SELECT * FROM appointments a JOIN contacts c WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN " +
+            String sql = "SELECT * FROM sched_app_schema.appointments a JOIN sched_app_schema.contacts c WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN " +
                     "? AND ?) ORDER BY a.Start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
@@ -71,13 +74,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC );
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -116,17 +119,18 @@ public class DBAppointment {
 
         apptIn15.clear();
 
+
         LocalDateTime now = LocalDateTime.now();
         ZonedDateTime zdtNow = now.atZone(ZoneId.systemDefault());
-        ZonedDateTime zdtUTC = zdtNow.withZoneSameInstant(ZoneOffset.UTC);
-        ZonedDateTime zdtPlus = zdtUTC.plusMinutes(15);
-        String startString = zdtUTC.format(dtf);
+        ZonedDateTime zdtUTC = zdtNow.withZoneSameInstant(ZoneOffset.UTC); // 7 hours ahead of PST [America/Los Angeles], 4 ahead of EST
+        ZonedDateTime zdtPlus = zdtUTC.plusMinutes(15); // 7 hours 15 minutes ahead of PST [America/Los Angeles], 4.25 ahead of EST
+        String startString = zdtUTC.format(dtf); // Same as zdtUTC
         String endString = zdtPlus.format(dtf);
 
         try {
-            String sql = "SELECT * FROM appointments a JOIN contacts c WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN " +
-                    "? AND ?) ORDER BY" +
-                    " a.Appointment_ID, a.Start ASC;";
+            String sql = "SELECT * FROM sched_app_schema.appointments a " +
+                    "WHERE (a.Start BETWEEN ? AND ?) " +
+                    "ORDER BY a.Appointment_ID, a.Start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
 
@@ -142,13 +146,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -185,7 +189,7 @@ public class DBAppointment {
         ObservableList<Appointment> apptsListWkly = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * FROM appointments as a LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID \n" +
+            String sql = "SELECT * FROM sched_app_schema.appointments as a LEFT OUTER JOIN sched_app_schema.contacts as c ON a.Contact_ID = c.Contact_ID \n" +
                     "WHERE start BETWEEN '" + date + "' AND DATE_ADD('"+ date +"', INTERVAL 1 WEEK) ORDER BY start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
@@ -200,13 +204,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -246,7 +250,7 @@ public class DBAppointment {
         ObservableList<Appointment> apptsListMonthly = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * FROM appointments AS a LEFT OUTER JOIN contacts AS c ON a.Contact_ID = c.Contact_ID \n" +
+            String sql = "SELECT * FROM sched_app_schema.appointments AS a LEFT OUTER JOIN sched_app_schema.contacts AS c ON a.Contact_ID = c.Contact_ID \n" +
                     "WHERE YEAR(Start) = '" + year +"' AND MONTH(Start) =  '" + month +"' ORDER BY start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
@@ -261,13 +265,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zStart2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -361,13 +365,13 @@ public class DBAppointment {
                 int contactId = rs.getInt("Contact_ID");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -421,13 +425,13 @@ public class DBAppointment {
                 int contactId = rs.getInt("Contact_ID");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -467,7 +471,7 @@ public class DBAppointment {
      */
     //add new appt to db
     public static void apptAddNew(String title, String description, String location,
-                                  String type, String start, String end, int customerId,
+                                  String type, LocalDateTime start, LocalDateTime end, int customerId,
                                   int userId, int contactId) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -484,8 +488,8 @@ public class DBAppointment {
             stmt.setString(2, description);
             stmt.setString(3, location);
             stmt.setString(4, type);
-            stmt.setString(5, start);
-            stmt.setString(6, end);
+            stmt.setTimestamp(5, Timestamp.valueOf(start));
+            stmt.setTimestamp(6, Timestamp.valueOf(end));
             stmt.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().format(dtf)));
             stmt.setString(8, User.getCurrentUser());
             stmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now().format(dtf)));
@@ -568,8 +572,8 @@ public class DBAppointment {
      *
      */
     //updates appointment in the database
-    public static void apptUpdate(int appointmentId, String title, String description, String location, String type, String start,
-                                  String end, String lastUpdatedBy, int customerId, int userId, int contactId) {
+    public static void apptUpdate(int appointmentId, String title, String description, String location, String type, LocalDateTime start,
+                                  LocalDateTime end, String lastUpdatedBy, int customerId, int userId, int contactId) {
         try {
 
 
@@ -582,8 +586,8 @@ public class DBAppointment {
             ps.setString(2, description);
             ps.setString(3, location);
             ps.setString(4, type);
-            ps.setString(5, start);
-            ps.setString(6, end);
+            ps.setTimestamp(5, Timestamp.valueOf(start));
+            ps.setTimestamp(6, Timestamp.valueOf(end));
             ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().format(dtf)));
             ps.setString(8, lastUpdatedBy);
             ps.setInt(9, customerId);
@@ -626,13 +630,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");
@@ -683,13 +687,13 @@ public class DBAppointment {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 Timestamp apptStart = rs.getTimestamp("Start");
-                ZonedDateTime zStart = ZonedDateTime.of(apptStart.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zStart2 = zStart.withZoneSameInstant(ZoneId.systemDefault());
-                String start = zStart2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtStart = apptStart.toLocalDateTime();
+                ZonedDateTime zStart2 = ldtStart.atZone(ZoneId.systemDefault());
+                LocalDateTime start = zStart2.toLocalDateTime();
                 Timestamp apptEnd = rs.getTimestamp("End");
-                ZonedDateTime zEnd = ZonedDateTime.of(apptEnd.toLocalDateTime(), ZoneOffset.UTC);
-                ZonedDateTime zEnd2 = zEnd.withZoneSameInstant(ZoneId.systemDefault());
-                String end = zEnd2.toLocalDateTime().format(dtf);
+                LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
+                ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");

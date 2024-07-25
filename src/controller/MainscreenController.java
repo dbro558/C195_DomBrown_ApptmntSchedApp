@@ -1,6 +1,4 @@
 package controller;
-
-
 import Database.DatabaseConnection;
 import DatabaseAccess.DBAppointment;
 import javafx.collections.FXCollections;
@@ -58,7 +56,7 @@ public class MainscreenController implements Initializable {
         allAppts = DBAppointment.getAllAppointments();
 
 
-        //put default tableview view in here (displays all appointments from today's date)
+        //put default tableview view in here (displays all of this month's appointments from today's date)
 
             mainscreenTVApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
             mainscreenTVTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
