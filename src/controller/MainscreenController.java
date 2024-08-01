@@ -1,4 +1,5 @@
 package controller;
+
 import Database.DatabaseConnection;
 import DatabaseAccess.DBAppointment;
 import javafx.collections.FXCollections;
@@ -13,9 +14,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 /** MainscreenController class
@@ -30,7 +36,8 @@ public class MainscreenController implements Initializable {
     @FXML TableView <Appointment> mainScreenTableView;
     @FXML TableColumn <Appointment, Integer> mainscreenTVApptIDColumn, mainscreenTVCustIDColumn, mainscreenTVUserIDColumn;
     @FXML TableColumn<Appointment, String> mainscreenTVTitleColumn, mainscreenTVDescriptColumn, mainscreenTVLocColumn,
-            mainscreenTVContactColumn, mainscreenTVTypeColumn, mainscreenTVStartColumn, mainscreenTVEndColumn;
+            mainscreenTVContactColumn, mainscreenTVTypeColumn;
+    @FXML TableColumn<Appointment, LocalDateTime> mainscreenTVStartColumn, mainscreenTVEndColumn;
     @FXML RadioButton apptsAllRadBtn, apptsByWeekRadBtn, apptsByMonthRadBtn;
     @FXML Button mainscreenAddBtn, mainscreenUpdateBtn, mainscreenDeleteBtn, mainscreenReportsBtn, mainscreenCustomersBtn, mainscreenLogoutBtn;
     @FXML ToggleGroup toggleGroup1;
@@ -40,6 +47,9 @@ public class MainscreenController implements Initializable {
 
     ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
     ObservableList<Appointment> upcomingAppts = DBAppointment.getAllAppointmentsRefresh();
+
+    //User's local time zone
+    ZoneId userZoneId = ZoneId.systemDefault();
 
 
      /** initialize
@@ -62,13 +72,43 @@ public class MainscreenController implements Initializable {
             mainscreenTVTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
             mainscreenTVDescriptColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
             mainscreenTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-            mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+            mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
             mainscreenTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-            mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-            mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
             mainscreenTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             mainscreenTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
-            mainScreenTableView.setItems(allAppts);
+
+            //Custom cell factories for date/time columns
+            mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+            mainscreenTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty || item == null){
+                        setText(null);
+                    } else {
+                        //Convert from UTC to user's LocalDateTime
+                        ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                        setText(userStartZonedDateTime.format(DBAppointment.formatter));
+                    }
+                }
+            });
+            mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+            mainscreenTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty || item == null){
+                        setText(null);
+                    } else {
+                        //Convert from UTC to user's LocalDateTime
+                        ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                        setText(userEndZonedDateTime.format(DBAppointment.formatter));
+                    }
+                }
+            });
+
+
+        mainScreenTableView.setItems(allAppts);
 
 
     }
@@ -88,12 +128,37 @@ public class MainscreenController implements Initializable {
             mainscreenTVTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
             mainscreenTVDescriptColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
             mainscreenTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-            mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+            mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
             mainscreenTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-            mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-            mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
             mainscreenTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             mainscreenTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+            // Custom cell factories for date time columns
+            mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+            mainscreenTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty || item == null){
+                        setText(null);
+                    } else {
+                        setText(item.format(DBAppointment.formatter));
+                    }
+                }
+            });
+            mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+            mainscreenTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty || item == null){
+                        setText(null);
+                    } else {
+                        setText(item.format(DBAppointment.formatter));
+                    }
+                }
+            });
+
             mainScreenTableView.setItems(upcomingAppts);
 
 

@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /** This class holds SQL database queries dealing directly with appointments
  * @author Dom Brown-Gonzalez
@@ -27,7 +28,8 @@ public class DBAppointment {
     /** public variable DateTimeFormatter
      *  dtf is used throughout this (DBAppointment) class to format datetimes*/
     public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-   // public static ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.systemDefault());
+   // public static ZonedDateTime now =
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy, h:mm a", Locale.ENGLISH); //user-friendly datetime for tableviews
     /** ObservableList apptsList
      * This is a list that holds appointment data and is used throughout this (DBAppointment) class*/
     public static ObservableList<Appointment> apptsList = FXCollections.observableArrayList();
@@ -56,8 +58,8 @@ public class DBAppointment {
 
 
         try {
-            String sql = "SELECT * FROM sched_app_schema.appointments a JOIN sched_app_schema.contacts c WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN " +
-                    "? AND ?) ORDER BY a.Start ASC;";
+            String sql = "SELECT * FROM sched_app_schema.appointments a JOIN sched_app_schema.contacts c " +
+                    "WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN ? AND ?) ORDER BY a.Start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
 
@@ -88,10 +90,10 @@ public class DBAppointment {
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-                String contactName = rs.getString("Contact_Name");
+                String contactName = DBContact.getContactName(contactID);
 
 
-                Appointment appointment = new Appointment(appointmentId, title, description, location, contactID,
+                Appointment appointment = new Appointment(appointmentId, title, description, location,
                         type, start, end, customerId, userId, contactName);
 
 
@@ -128,9 +130,8 @@ public class DBAppointment {
         String endString = zdtPlus.format(dtf);
 
         try {
-            String sql = "SELECT * FROM sched_app_schema.appointments a " +
-                    "WHERE (a.Start BETWEEN ? AND ?) " +
-                    "ORDER BY a.Appointment_ID, a.Start ASC;";
+            String sql = "SELECT * FROM sched_app_schema.appointments a JOIN sched_app_schema.contacts c " +
+                    "WHERE c.Contact_ID = a.Contact_ID AND (a.Start BETWEEN ? AND ?) ORDER BY a.Start ASC;";
 
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql);
 
@@ -393,6 +394,8 @@ public class DBAppointment {
         }
         return apptsByContactList;
     }
+
+
 
     /** getAllAppointmentsByCustomer
      * Queries database for appointment data.

@@ -9,15 +9,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 
@@ -35,7 +35,8 @@ public class MonthlyApptsController implements Initializable {
     @FXML
     TableColumn<Appointment, Integer> moTVApptIDColumn, moTVCustIDColumn, moTVUserIDColumn;
     @FXML TableColumn<Appointment, String> moTVTitleColumn, moTVDescriptColumn, moTVLocColumn,
-            moTVContactColumn, moTVTypeColumn, moTVStartColumn, moTVEndColumn;
+            moTVContactColumn, moTVTypeColumn;
+    @FXML TableColumn<Appointment, LocalDateTime> moTVStartColumn, moTVEndColumn;
     @FXML
     Button moGetApptsBtn, moHomeBtn;
     @FXML
@@ -49,6 +50,9 @@ public class MonthlyApptsController implements Initializable {
             "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024");
     ObservableList<String> monthList = FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07",
                     "08", "09", "10", "11", "12");
+
+    //User's local time zone
+    ZoneId userZoneId = ZoneId.systemDefault();
 
 
 
@@ -128,10 +132,39 @@ public class MonthlyApptsController implements Initializable {
         moTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         moTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         moTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        moTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-        moTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         moTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         moTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        // Custom cell factories for date time columns
+        moTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        moTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty){
+                super.updateItem(item, empty);
+                if (empty || item == null){
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userStartZonedDateTime.format(DBAppointment.formatter));
+                }
+            }
+        });
+        moTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        moTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty){
+                super.updateItem(item, empty);
+                if (empty || item == null){
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userEndZonedDateTime.format(DBAppointment.formatter));
+                }
+            }
+        });
+
         moScreenTableView.setItems(monthlyAppts);
     }
 

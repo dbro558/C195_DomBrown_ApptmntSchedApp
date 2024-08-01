@@ -1,6 +1,10 @@
 package model;
 
+import DatabaseAccess.DBAppointment;
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /** This class represents an appointment
  * @author Dom Brown-Gonzalez
@@ -264,11 +268,28 @@ public class Appointment {
         return start;
     }
 
+    /** formatted start as string getter
+     * @return returns the formatted start date/time*/
+    public String getFormattedStartString() {
+        ZonedDateTime zdtStartUTC = start.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtStartSysDef = zdtStartUTC.withZoneSameInstant(ZoneId.systemDefault());
+        return zdtStartSysDef.format(DBAppointment.formatter);
+    }
+
     /** end getter
      * @return returns the end date/time*/
     public LocalDateTime getEnd() {
         return end;
     }
+
+    /** formatted end as string getter
+     * @return returns the formatted end date/time*/
+    public String getFormattedEndString() {
+        ZonedDateTime zdtEndUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtEndSysDef = zdtEndUTC.withZoneSameInstant(ZoneId.systemDefault());
+        return zdtEndSysDef.format(DBAppointment.formatter);
+    }
+
 
     /** count getter
      * @return returns count*/

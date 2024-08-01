@@ -48,48 +48,51 @@ public class UpdateController implements Initializable {
     @FXML
     DatePicker updateApptDatePicker;
     @FXML
-    TableView <Appointment> updateApptTableView;
+    TableView<Appointment> updateApptTableView;
     @FXML
-    TableColumn <Appointment, Integer> updateApptIDColumn, updateCustomerColumn;
+    TableColumn<Appointment, Integer> updateApptIDColumn, updateCustomerColumn;
     @FXML
-    TableColumn <Appointment, String> updateTitleColumn, updateDescriptionColumn, updateLocationColumn, updateContactColumn,
+    TableColumn<Appointment, String> updateTitleColumn, updateDescriptionColumn, updateLocationColumn, updateContactColumn,
             updateTypeColumn;
     @FXML
-    TableColumn <Appointment, Timestamp> updateStartColumn, updateEndColumn;
+    TableColumn<Appointment, Timestamp> updateStartColumn, updateEndColumn;
     @FXML
-    TableView <Customer> updateCustTableView;
+    TableView<Customer> updateCustTableView;
     @FXML
-    TableColumn <Customer, Integer> updateCustCustomerIDColumn;
+    TableColumn<Customer, Integer> updateCustCustomerIDColumn;
     @FXML
-    TableColumn <Customer, String> updateCustCustomerNameColumn, updateCustAddressColumn, updateCustFLDivisionColumn,
+    TableColumn<Customer, String> updateCustCustomerNameColumn, updateCustAddressColumn, updateCustFLDivisionColumn,
             updateCustPhoneColumn, updateCustPostalColumn;
-    @FXML Label updateIDLabel;
+    @FXML
+    Label updateIDLabel;
 
     Stage stage;
     Parent scene;
     LocalDate chosenDate;
-    /** startTime
+    /**
+     * startTime
      * public variable startTime of type LocalTime.
      * used throughout this (UpdateController) class in association with start combo box items.
-     * */
+     */
     public LocalTime startTime;
-    /** endTime
+    /**
+     * endTime
      * public variable endTime of type LocalTime.
      * used throughout this (UpdateController) class in association with end combo box items.
-     * */
+     */
     public LocalTime endTime;
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    /** invalidBizHours
+    /**
+     * invalidBizHours
      * Boolean value.
      * Associated with Boolean method validateBizHours.
-     *
-     * */
+     */
     public static Boolean invalidBizHrs;
-    /** overlap
+    /**
+     * overlap
      * Boolean value.
      * Associated with Boolean method validateOverlap.
-     *
-     * */
+     */
     public static Boolean overlap;
 
     ObservableList<String> allContacts = DBContact.getContactNames();
@@ -103,18 +106,18 @@ public class UpdateController implements Initializable {
     ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
 
 
-    /** initialize
-     *Initializes the stage/scene.
-     *Contains conditions and call to update method.
-     *
+    /**
+     * initialize
+     * Initializes the stage/scene.
+     * Contains conditions and call to update method.
+     * <p>
      * Lambda expression sets start hours in addStartComboBox
      * Lambda expression sets end hours in addEndComboBox
      * Lambda expression event listener to determine if updateIDTxtField is null (alert displayed if null,
      * otherwise continue to next condition of attempted update)
      *
-     * @param url Stage path
+     * @param url            Stage path
      * @param resourceBundle resourceBundle
-     *
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -254,8 +257,7 @@ public class UpdateController implements Initializable {
                         alert.showAndWait();
                     }
                 }
-            }
-            else if (updateApptTableView.isVisible() && updateDescriptionTxtField.getText() != null && !updateIDTxtField.getText().isEmpty()) {
+            } else if (updateApptTableView.isVisible() && updateDescriptionTxtField.getText() != null && !updateIDTxtField.getText().isEmpty()) {
                 //if this table view is visible then Appointment was chosen from updateChooseComboBox
                 //if the above fields have text then an Appointment row has been chosen
 
@@ -265,99 +267,97 @@ public class UpdateController implements Initializable {
     }
 
 
-    /** onActionUpdateChooseComboBox
+    /**
+     * onActionUpdateChooseComboBox
      * ActionEvent performed when Appointment or Customer is selected from CHOOSE combo box.
      * Sets visibility of scene elements, calls method(s) to populate table views.
-     *
+     * <p>
      * Lambda expression to call method to fill fields with data when row in visible table view is clicked
      *
      * @param event action event for updateChooseComboBox
-     *
-     * */
+     */
     @FXML
-        public void onActionUpdateChooseComboBox (ActionEvent event){
+    public void onActionUpdateChooseComboBox(ActionEvent event) {
         //if user selects Appointment from combo box
-            if (updateChooseComboBox.getSelectionModel().getSelectedItem() == "Appointment") {
-                //show only fields used for displaying/gathering appointment data
-                updateCustTableView.setVisible(false);
-                updateAddressTxtField.setVisible(false);
-                updateCountryComboBox.setVisible(false);
-                updatePhoneTxtField.setVisible(false);
-                updatePostalTxtField.setVisible(true);
-                updatePostalTxtField.setPromptText("Location");
-                updateStateProvinceComboBox.setVisible(false);
-                updateIDLabel.setVisible(true);
-                updateIDLabel.setText("Appointment ID");
-                updateIDTxtField.setVisible(true);
-                updateCustomerNameTxtField.setVisible(true);
-                updateCustomerNameTxtField.setEditable(false);
-                updateTitleTxtField.setVisible(true);
-                updateTitleTxtField.setPromptText("Title");
-                updateTypeTxtField.setVisible(true);
-                updateContactComboBox.setVisible(true);
-                updateApptDatePicker.setVisible(true);
-                updateStartComboBox.setVisible(true);
-                updateEndComboBox.setVisible(true);
-                updateDescriptionTxtField.setVisible(true);
-                updateApptTableView.setVisible(true);
-                updateUserComboBox.setVisible(true);
-                updateContactTxtField.setVisible(true);
-                updateUserTxtField.setVisible(true);
+        if (updateChooseComboBox.getSelectionModel().getSelectedItem() == "Appointment") {
+            //show only fields used for displaying/gathering appointment data
+            updateCustTableView.setVisible(false);
+            updateAddressTxtField.setVisible(false);
+            updateCountryComboBox.setVisible(false);
+            updatePhoneTxtField.setVisible(false);
+            updatePostalTxtField.setVisible(true);
+            updatePostalTxtField.setPromptText("Location");
+            updateStateProvinceComboBox.setVisible(false);
+            updateIDLabel.setVisible(true);
+            updateIDLabel.setText("Appointment ID");
+            updateIDTxtField.setVisible(true);
+            updateCustomerNameTxtField.setVisible(true);
+            updateCustomerNameTxtField.setEditable(false);
+            updateTitleTxtField.setVisible(true);
+            updateTitleTxtField.setPromptText("Title");
+            updateTypeTxtField.setVisible(true);
+            updateContactComboBox.setVisible(true);
+            updateApptDatePicker.setVisible(true);
+            updateStartComboBox.setVisible(true);
+            updateEndComboBox.setVisible(true);
+            updateDescriptionTxtField.setVisible(true);
+            updateApptTableView.setVisible(true);
+            updateUserComboBox.setVisible(true);
+            updateContactTxtField.setVisible(true);
+            updateUserTxtField.setVisible(true);
 
-                populateAppointmentsTable();
+            populateAppointmentsTable();
 
-                //lambda to call method to fill fields with data when row in appointments table view is clicked
-                updateApptTableView.setOnMouseClicked((MouseEvent ev) -> {//lambda 4
-                    if (ev.getClickCount() > 0) {
-                        onApptRowClicked();
-                    }
-                });
+            //lambda to call method to fill fields with data when row in appointments table view is clicked
+            updateApptTableView.setOnMouseClicked((MouseEvent ev) -> {//lambda 4
+                if (ev.getClickCount() > 0) {
+                    onApptRowClicked();
+                }
+            });
 
             //if user selects Customer from combo box
-            } else if (updateChooseComboBox.getSelectionModel().getSelectedItem() == "Customer") {
+        } else if (updateChooseComboBox.getSelectionModel().getSelectedItem() == "Customer") {
 
-                //show only fields used for displaying/gathering customer data
-                updateApptTableView.setVisible(false);
-                updateAddressTxtField.setVisible(true);
-                updateCountryComboBox.setVisible(true);
-                updatePhoneTxtField.setVisible(true);
-                updatePhoneTxtField.setEditable(false);
-                updatePostalTxtField.setPromptText("Postal Code");
-                updatePostalTxtField.setVisible(true);
-                updatePostalTxtField.setEditable(false);
-                updateStateProvinceComboBox.setVisible(true);
-                updateIDLabel.setVisible(true);
-                updateIDLabel.setText("Customer ID");
-                updateIDTxtField.setVisible(true);
-                updateCustomerNameTxtField.setVisible(true);
-                updateCustomerNameTxtField.setEditable(true);
-                updateTitleTxtField.setVisible(false);
-                updateTypeTxtField.setVisible(false);
-                updateContactComboBox.setVisible(true);
-                updateApptDatePicker.setVisible(false);
-                updateStartComboBox.setVisible(false);
-                updateEndComboBox.setVisible(false);
-                updateDescriptionTxtField.setVisible(false);
-                updateCustTableView.setVisible(true);
-                updateUserComboBox.setVisible(false);
-                updateContactComboBox.setVisible(false);
-                updateContactTxtField.setVisible(false);
-                updateUserTxtField.setVisible(false);
+            //show only fields used for displaying/gathering customer data
+            updateApptTableView.setVisible(false);
+            updateAddressTxtField.setVisible(true);
+            updateCountryComboBox.setVisible(true);
+            updatePhoneTxtField.setVisible(true);
+            updatePhoneTxtField.setEditable(false);
+            updatePostalTxtField.setPromptText("Postal Code");
+            updatePostalTxtField.setVisible(true);
+            updatePostalTxtField.setEditable(false);
+            updateStateProvinceComboBox.setVisible(true);
+            updateIDLabel.setVisible(true);
+            updateIDLabel.setText("Customer ID");
+            updateIDTxtField.setVisible(true);
+            updateCustomerNameTxtField.setVisible(true);
+            updateCustomerNameTxtField.setEditable(true);
+            updateTitleTxtField.setVisible(false);
+            updateTypeTxtField.setVisible(false);
+            updateContactComboBox.setVisible(true);
+            updateApptDatePicker.setVisible(false);
+            updateStartComboBox.setVisible(false);
+            updateEndComboBox.setVisible(false);
+            updateDescriptionTxtField.setVisible(false);
+            updateCustTableView.setVisible(true);
+            updateUserComboBox.setVisible(false);
+            updateContactComboBox.setVisible(false);
+            updateContactTxtField.setVisible(false);
+            updateUserTxtField.setVisible(false);
 
 
+            populateCustomersTable();
 
-                populateCustomersTable();
+            //lambda to fill fields with data when row in customer table view is clicked
+            updateCustTableView.setOnMouseClicked((MouseEvent ev) -> {//lambda 5
+                if (ev.getClickCount() > 0) {
+                    onCustRowClicked();
+                }
+            });
 
-                //lambda to fill fields with data when row in customer table view is clicked
-                updateCustTableView.setOnMouseClicked((MouseEvent ev) -> {//lambda 5
-                    if (ev.getClickCount() > 0) {
-                        onCustRowClicked();
-                    }
-                });
-
-            }
         }
-
+    }
 
 
     private class StartHoursCell extends ListCell<Integer> {
@@ -367,13 +367,13 @@ public class UpdateController implements Initializable {
             updateEndComboBox.valueProperty().addListener((obs, oldEndHours, newEndHours) -> updateDisableState());//lambda 6
         }
 
-        /** updateItem
+        /**
+         * updateItem
          * Updates the hour items.
          *
          * @param hourValue integer value representing an hour
-         * @param empty boolean value
-         *
-         * */
+         * @param empty     boolean value
+         */
         @Override
         protected void updateItem(Integer hourValue, boolean empty) {//updates the hour items
 
@@ -402,13 +402,13 @@ public class UpdateController implements Initializable {
             updateStartComboBox.valueProperty().addListener((obs, oldEndHours, newEndHours) -> updateDisableState());//lambda 7
         }
 
-        /** updateItem
-         *Updates the hour items.
+        /**
+         * updateItem
+         * Updates the hour items.
          *
          * @param hourValue integer value representing an hour
-         * @param empty boolean value
-         *
-         * */
+         * @param empty     boolean value
+         */
         @Override
         protected void updateItem(Integer hourValue, boolean empty) {//updates the hour items
 
@@ -436,15 +436,14 @@ public class UpdateController implements Initializable {
     }
 
 
-    /** onActionUpdateHomeBtn
+    /**
+     * onActionUpdateHomeBtn
      * ActionEvent performed when HOME button is clicked.
      * Switches scene to main screen of application when HOME button is clicked.
      *
      * @param event action event for updateHomeBtn
-     *
      * @throws IOException an I/O Exception has occurred
-     *
-     * */
+     */
     @FXML
     public void onActionUpdateHomeBtn(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -455,13 +454,13 @@ public class UpdateController implements Initializable {
     }
 
 
-    /** onActionUpdateClearBtn
+    /**
+     * onActionUpdateClearBtn
      * ActionEvent performed when CLEAR button is clicked.
      * Clears text fields and combo box selections.
      *
      * @param event action event for updateClearBtn
-     *
-     * */
+     */
     @FXML
     public void onActionUpdateClearBtn(ActionEvent event) {
         //clears all fields
@@ -505,33 +504,32 @@ public class UpdateController implements Initializable {
 
 
     @FXML
-    private void onActionUpdateContactTxtField(ActionEvent event){
+    private void onActionUpdateContactTxtField(ActionEvent event) {
 
     }
 
 
     @FXML
-    private void onActionUpdateUserTxtField(ActionEvent event){
+    private void onActionUpdateUserTxtField(ActionEvent event) {
 
     }
 
-    /** onActionUpdateStateProvinceComboBox
+    /**
+     * onActionUpdateStateProvinceComboBox
      * ActionEvent performed when an item is selected in updateCountryComboBox.
      * Sets the postal text field to editable and formats allowable input based on selection.
-     *
+     * <p>
      * Lambda expression to limit text field to digits only, with a max length of 5 digits, when U.S. or Canada are selected in the combo box.
      * Lambda expression to limit text field to alphanumeric characters only, with a mx length of 5 characters, when UK is selected from the combo box.
      *
      * @param event action event for updateStateProvinceComboBox
-     *
-     * */
+     */
     @FXML
     public void onActionUpdateStateProvinceComboBox(ActionEvent event) {
-        if(updateCountryComboBox.getSelectionModel().getSelectedItem() != "UK" && updateStateProvinceComboBox.getValue() != null) {
+        if (updateCountryComboBox.getSelectionModel().getSelectedItem() != "UK" && updateStateProvinceComboBox.getValue() != null) {
             updatePostalTxtField.setEditable(true);
             updatePostalTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("^|\\d{0,5}") ? c : null));//lambda 8
-        }
-        else if (updateCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && updateStateProvinceComboBox.getValue() != null) {
+        } else if (updateCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && updateStateProvinceComboBox.getValue() != null) {
             updatePostalTxtField.setEditable(true);
             updatePostalTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("^|[a-zA-Z0-9]{0,5}$") ? c : null));//lambda 9
         }
@@ -553,45 +551,46 @@ public class UpdateController implements Initializable {
     private void onActionUpdatePhoneTxtField(ActionEvent event) {
     }
 
-    /** onActionUpdateContactComboBox
+    /**
+     * onActionUpdateContactComboBox
      * ActionEvent performed when an item is selected from updateContactComboBox.
      * Sets text in updateContactTxtField with the selected contact's name.
-     * @param event action event for updateContactComboBox
      *
-     * */
+     * @param event action event for updateContactComboBox
+     */
     @FXML
     public void onActionUpdateContactComboBox(ActionEvent event) {
-        if (updateContactComboBox.getValue() != null){
+        if (updateContactComboBox.getValue() != null) {
             updateContactTxtField.setText(updateContactComboBox.getSelectionModel().getSelectedItem().toString());
         }
     }
 
-    /** onActionUpdateCountryComboBox
+    /**
+     * onActionUpdateCountryComboBox
      * ActionEvent performed when an item is selected in updateCountryComboBox.
      * Sets the phone textfield to editable and formats allowable input based on selection.
-     *
+     * <p>
      * Lambda expression to limit textfield to digits only, with a max length of 10 digits, when U.S. or Canada are selected in the combo box.
      * Lambda expression to limit textfield to digits only, with a mx length of 12 digits, when UK is selected from the combo box.
      *
      * @param event action event for updateCountryComboBox
-     *
-     * */
+     */
     @FXML
     public void onActionUpdateCountryComboBox(ActionEvent event) {
         //populates state/province combo based on country combo choice
-        if(updateCountryComboBox.getSelectionModel().getSelectedItem() == "U.S."){
+        if (updateCountryComboBox.getSelectionModel().getSelectedItem() == "U.S.") {
             updateStateProvinceComboBox.setItems(allDivisionsUS);
             updatePhoneTxtField.clear();
             updatePhoneTxtField.setEditable(true);
             updatePhoneTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches( //lambda 10
                     "^|[0-9]{0,10}") ? c : null));
-        }else if(updateCountryComboBox.getSelectionModel().getSelectedItem() == "UK"){
+        } else if (updateCountryComboBox.getSelectionModel().getSelectedItem() == "UK") {
             updateStateProvinceComboBox.setItems(allDivisionsUK);
             updatePhoneTxtField.setEditable(true);
             updatePhoneTxtField.clear();
             updatePhoneTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches( //lambda 11
-            "^|[0-9]{0,12}") ? c : null));
-        }else if(updateCountryComboBox.getSelectionModel().getSelectedItem() == "Canada"){
+                    "^|[0-9]{0,12}") ? c : null));
+        } else if (updateCountryComboBox.getSelectionModel().getSelectedItem() == "Canada") {
             updateStateProvinceComboBox.setItems(allDivisionsCanada);
             updatePhoneTxtField.clear();
             updatePhoneTxtField.setEditable(true);
@@ -601,37 +600,37 @@ public class UpdateController implements Initializable {
     }
 
     @FXML
-    private void onActionUpdateDescriptionTxtField(ActionEvent event){
+    private void onActionUpdateDescriptionTxtField(ActionEvent event) {
 
     }
 
-    /** onActionUpdateStateProvinceComboBox
+    /**
+     * onActionUpdateStateProvinceComboBox
      * ActionEvent performed when an item is selected in updateUserComboBox.
      * Sets the user textfield with the selected user's name.
      *
      * @param event action event for updateUserComboBox
-     *
-     * */
+     */
     @FXML
-    public void onActionUpdateUserComboBox(ActionEvent event){
+    public void onActionUpdateUserComboBox(ActionEvent event) {
 
-        if (updateUserComboBox.getValue() != null){
+        if (updateUserComboBox.getValue() != null) {
             updateUserTxtField.setText(updateUserComboBox.getSelectionModel().getSelectedItem().toString());
         }
     }
 
-    /** onActionUpdateApptDatePicker
+    /**
+     * onActionUpdateApptDatePicker
      * ActionEvent performed when a date is selected from the date picker.
      * Gets value from updateApptDatePicker.
      * If value is null or selected date is today's date or before, an error alert is displayed.
      *
      * @param event action event for updateApptDatePicker
-     *
-     * */
+     */
     @FXML
     public void onActionUpdateApptDatePicker(ActionEvent event) {
 
-      //warning message if user chooses today's date or before
+        //warning message if user chooses today's date or before
         if (updateApptDatePicker.getValue() != null) {
             chosenDate = updateApptDatePicker.getValue();
             System.out.println("Chosen date: " + chosenDate);
@@ -661,11 +660,11 @@ public class UpdateController implements Initializable {
 
     }
 
-    /** onCustRowClicked
+    /**
+     * onCustRowClicked
      * Method called when row is clicked in customer tableview.
      * Sets text fields with selected customer's data.
-     *
-     * */
+     */
     public void onCustRowClicked() {
         // check the customer table's selected item and get selected item
         if (updateCustTableView.getSelectionModel().getSelectedItem() != null) {
@@ -680,11 +679,11 @@ public class UpdateController implements Initializable {
         }
     }
 
-    /** onApptRowClicked
+    /**
+     * onApptRowClicked
      * Method called when row is clicked in appointment tableview.
      * Sets text fields with selected appointment's data.
-     *
-     * */
+     */
     public void onApptRowClicked() {
         // check the appointment table's selected item and get selected item
         if (updateApptTableView.getSelectionModel().getSelectedItem() != null) {
@@ -706,12 +705,12 @@ public class UpdateController implements Initializable {
     }
 
 
-    /** populateAppointmentsTable
+    /**
+     * populateAppointmentsTable
      * Method called when Appointment is selected in CHOOSE combo box.
      * Populates the Appointment tableview with appointments data.
-     *
-     * */
-    public void populateAppointmentsTable(){
+     */
+    public void populateAppointmentsTable() {
 
 
         allAppts = DBAppointment.getAllAppointmentsRefresh();
@@ -728,12 +727,12 @@ public class UpdateController implements Initializable {
         updateApptTableView.setItems(allAppts);
     }
 
-    /** populateCustomersTable
+    /**
+     * populateCustomersTable
      * Method called when Customer is selected in CHOOSE combobox.
      * Populates the Customer tableview with customer data.
-     *
-     * */
-    public void populateCustomersTable(){
+     */
+    public void populateCustomersTable() {
         updateCustCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         updateCustCustomerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         updateCustAddressColumn.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
@@ -743,12 +742,12 @@ public class UpdateController implements Initializable {
         updateCustTableView.setItems(allCustomers);
     }
 
-    /** updateApptToDB
+    /**
+     * updateApptToDB
      * Method called when UPDATE button is clicked and all conditions for updating have been met.
      * If all conditions are met (no empty fields, valid business hours and no overlapping appointments for selected customer),
      * then appointment is updated in the database. Alert message is displayed if a condition fails.
-     *
-     * */
+     */
     public void updateApptToDB() {
 
         if (applyUpdateBtn.isArmed()) {
@@ -768,11 +767,12 @@ public class UpdateController implements Initializable {
                 } else {
                     //... user chose CANCEL or closed the dialog
                 }
-            } else {}
+            } else {
+            }
 
             String customerName = updateCustomerNameTxtField.getText();
 
-            if (updateApptDatePicker.getValue() == null | updateStartComboBox.getValue() == null | updateEndComboBox.getValue() == null){
+            if (updateApptDatePicker.getValue() == null | updateStartComboBox.getValue() == null | updateEndComboBox.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Date/Time Confirmation Error");
                 alert.setHeaderText("An appointment's date, start, and end times must all be re-entered before updating.");
@@ -795,24 +795,30 @@ public class UpdateController implements Initializable {
             //user's zoned date time
             ZonedDateTime startZDT = ZonedDateTime.of(startDateTime, ZoneId.systemDefault());
             ZonedDateTime endZDT = ZonedDateTime.of(endDateTime, ZoneId.systemDefault());
+
+            //user's time input to EST
             ZonedDateTime startInput = startZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
             ZonedDateTime endInput = endZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+
+            //Hour values from EST version of user's input times (used to check against business hours)
             LocalTime startLT = startInput.toLocalTime();
             LocalTime endLT = endInput.toLocalTime();
+            System.out.println("LocalTime of EST start ZDT: " + startLT);
+            System.out.println("LocalTime of EST end ZDT: " + endLT);
 
-            //to EST
+            //Business hours
             ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
             ZonedDateTime bizEnd = ZonedDateTime.of(chosenDate, LocalTime.of(22, 0), ZoneId.of("America/New_York"));
             LocalTime bizStartLT = bizStart.toLocalTime();
             LocalTime bizEndLT = bizEnd.toLocalTime();
 
             //to UTC unnecessary
-            //ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
-            // ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
 
             //formatted string
-            LocalDateTime start = startZDT.toLocalDateTime();
-            LocalDateTime end = endZDT.toLocalDateTime();
+            LocalDateTime start = startUTC.toLocalDateTime();//changed from startZDT
+            LocalDateTime end = endUTC.toLocalDateTime();//changed from endZDT
 
             invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
             if (invalidBizHrs) {
@@ -885,18 +891,17 @@ public class UpdateController implements Initializable {
         }
     }
 
-    /** validateBizHours
+    /**
+     * validateBizHours
      * Boolean method to check selected start and end times against company's business hours (EST).
      * The start and end times selected from the comboboxes are changed from the user's system default time to EST for comparison.
      *
-     * @param startLT the selected start LocalTime converted to EST
-     * @param endLT the selected end LocalTime converted to EST
+     * @param startLT    the selected start LocalTime converted to EST
+     * @param endLT      the selected end LocalTime converted to EST
      * @param bizStartLT company's EST business hours from 8 am to 9 pm EST
-     * @param bizEndLT company's EST business hours from 9am to 10 pm EST
-     *
+     * @param bizEndLT   company's EST business hours from 9am to 10 pm EST
      * @return returns true if INVALID business hours are selected, else false
-     *
-     * */
+     */
     public Boolean validateBizHours(LocalTime startLT, LocalTime endLT, LocalTime bizStartLT, LocalTime bizEndLT) {
 
         if (startLT.isBefore(bizStartLT)) return true;
@@ -907,17 +912,16 @@ public class UpdateController implements Initializable {
         else return false;
     }
 
-    /** validateOverlap
+    /**
+     * validateOverlap
      * Boolean method to check selected appointment date and start/end times against existing appointments
      * for the selected customer during the same time period on the same date.
      *
      * @param customerName name of customer associated with the appointment
-     * @param start the selected date and start time
-     * @param end the selected date and end time
-     *
+     * @param start        the selected date and start time
+     * @param end          the selected date and end time
      * @return returns true if there IS an overlap with an existing appointment for this customer, else false
-     *
-     * */
+     */
     public static Boolean validateOverlap(String customerName, LocalDateTime start, LocalDateTime end) {
 
         ObservableList<Appointment> allAppts = DBAppointment.getAllAppointmentsByCustomer(customerName);
@@ -940,5 +944,5 @@ public class UpdateController implements Initializable {
     }
 
 
-    }
+}
 

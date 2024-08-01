@@ -15,6 +15,7 @@ import model.Appointment;
 import model.Customer;
 import model.User;
 import utils.TimeControls;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -158,7 +159,7 @@ public class AddController implements Initializable {
         addStartComboBox.setCellFactory(cb -> new StartHoursCell());//lambda 1
         addEndComboBox.setCellFactory(cb -> new EndHoursCell());//lambda 2
         for (int i = 8; i < 22; i++) {
-           addStartComboBox.getItems().add(i);
+            addStartComboBox.getItems().add(i);
         }
         for (int i = 9; i < 23; i++) {
             addEndComboBox.getItems().add(i);
@@ -520,6 +521,7 @@ public class AddController implements Initializable {
      */
     public void saveApptToDB() throws NullPointerException {
 
+        // ensure necessary values are there to save appointment
         if (applyAddBtn.isArmed()) {
             if(addApptDatePicker.getValue() == null | addStartComboBox.getSelectionModel().isEmpty() | addStartComboBox.getValue() == null
                     | addEndComboBox.getSelectionModel().isEmpty() | addEndComboBox.getValue() == null
@@ -543,45 +545,26 @@ public class AddController implements Initializable {
             //LocalTime versions of start/end combo box values
             int startInt = Integer.parseInt(addStartComboBox.getSelectionModel().getSelectedItem().toString());
             String startS = TimeControls.convertComboTimeValue(startInt);
-            startTime = LocalTime.parse(startS);
+            LocalTime startTime = LocalTime.parse(startS);
             int endInt = Integer.parseInt(addEndComboBox.getSelectionModel().getSelectedItem().toString());
             String endS = TimeControls.convertComboTimeValue(endInt);
-            endTime = LocalTime.parse(endS);
+            LocalTime endTime = LocalTime.parse(endS);
 
             //create LocalDateTime from chosenDate and start/end times
             LocalDateTime startDateTime = LocalDateTime.of(chosenDate, startTime);
-            System.out.println("LDT startDateTime (used to compare against dbLDT in validateOverlap): " + startDateTime);
             LocalDateTime endDateTime = LocalDateTime.of(chosenDate, endTime);
-            System.out.println("LDT endDateTime (used to compare against dbLDT in validateOverlap): " + endDateTime);
 
+            //Convert LocalDateTime from EST to UTC
+            ZoneId estZoneId = ZoneId.of("America/New_York"); //establish ZoneId of New York for EST
+            ZonedDateTime startDateTimeEST = startDateTime.atZone(estZoneId); //this ensures EST start times
+            //System.out.println("LDT startDateTime (used to compare against dbLDT in validateOverlap): " + startDateTimeEST);
+            ZonedDateTime endDateTimeEST = endDateTime.atZone(estZoneId);
+            //System.out.println("LDT endDateTime (used to compare against dbLDT in validateOverlap): " + endDateTimeEST);
 
-            //user's time input as zoned date time
-            ZonedDateTime startZDT = ZonedDateTime.of(startDateTime, ZoneId.systemDefault());
-            System.out.println("User's start ZDT: " + startZDT);
-            ZonedDateTime endZDT = ZonedDateTime.of(endDateTime, ZoneId.systemDefault());
-            System.out.println("User's end ZDT: " + endZDT);
+            //Convert to UTC
+            ZonedDateTime startUTC = startDateTimeEST.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = endDateTimeEST.withZoneSameInstant(ZoneId.of("UTC"));
 
-            //user's time input to EST
-            ZonedDateTime startInput = startZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
-            System.out.println("Same start instant EST: " + startInput);
-            ZonedDateTime endInput = endZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
-            System.out.println("Same end instant EST: " + endInput);
-
-            //Hour values from EST version of user's input times (used to check against business hours)
-            LocalTime startLT = startInput.toLocalTime();
-            LocalTime endLT = endInput.toLocalTime();
-            System.out.println("LocalTime of EST start ZDT: " + startLT);
-            System.out.println("LocalTime of EST end ZDT: " + endLT);
-
-            //Business hours
-            ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
-            ZonedDateTime bizEnd = ZonedDateTime.of(chosenDate, LocalTime.of(22, 0), ZoneId.of("America/New_York"));
-            LocalTime bizStartLT = bizStart.toLocalTime();
-            LocalTime bizEndLT = bizEnd.toLocalTime();
-
-            //to UTC
-            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
-            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
 
             //get field & combo data
             String customerName = addCustomerNameTxtField.getText();
@@ -591,14 +574,24 @@ public class AddController implements Initializable {
             String description = addDescriptTxtField.getText();
             String location = addLocationTxtField.getText();
             String type = addTypeTxtField.getText();
-            LocalDateTime start = startZDT.toLocalDateTime();
-            LocalDateTime end = endZDT.toLocalDateTime();
+            LocalDateTime start = startUTC.toLocalDateTime(); //changed from startZDT.toLocalDateTime()
+            LocalDateTime end = endUTC.toLocalDateTime(); //changed from endZDT.toLocalDateTime()
 
             int customerId = DBCustomer.getCustomerId(customerName);
             int userId = DBUser.getUserId(userName);
             int contactId = DBContact.getContactId(contactName);
 
-            invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
+            //Business hours
+            ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
+            ZonedDateTime bizEnd = ZonedDateTime.of(chosenDate, LocalTime.of(22, 0), ZoneId.of("America/New_York"));
+            LocalTime bizStartLT = bizStart.toLocalTime();
+            LocalTime bizEndLT = bizEnd.toLocalTime();
+
+            //Check business hours
+            LocalTime startLT = startDateTime.toLocalTime();
+            LocalTime endLT = endDateTime.toLocalTime();
+
+            boolean invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
             if (invalidBizHrs) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Business Hours Error");

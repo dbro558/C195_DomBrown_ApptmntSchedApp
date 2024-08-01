@@ -24,19 +24,20 @@ public class DBReports {
      * @return returns vipReport, a list of the 10 customers with the most appointments scheduled for this month.
      *
      */
-    //get list of vip customers and their appointment counts
+    //get list of customers with the most appointments within one month from current date, appointment count summed per customer
     public static ObservableList<VIPReport> getVIPReport() {
 
         ObservableList<VIPReport> vipReport = FXCollections.observableArrayList();
         try {
-            String sql = "SELECT appointments.*, customers.Customer_ID, customers.Customer_Name, COUNT(*) AS count\n" +
-                    "FROM customers\n" +
-                    "JOIN appointments\n" +
-                    "ON customers.Customer_ID = appointments.Customer_ID\n" +
-                    "WHERE MONTH(appointments.Start) = MONTH(CURRENT_DATE())\n" +
-                    "AND YEAR(appointments.Start) = YEAR(CURRENT_DATE())" +
-                    "GROUP BY appointments.Appointment_ID, customers.Customer_ID, customers.Customer_Name\n" +
-                    "ORDER BY count DESC LIMIT 10;";
+            String sql = "SELECT customers.Customer_ID, customers.Customer_Name, COUNT(appointments.Appointment_ID) AS count " +
+                    "FROM customers " +
+                    "JOIN appointments " +
+                    "ON customers.Customer_ID = appointments.Customer_ID " +
+                    "WHERE MONTH(appointments.Start) = MONTH(CURRENT_DATE()) " +
+                    "AND YEAR(appointments.Start) = YEAR(CURRENT_DATE()) " +
+                    "GROUP BY customers.Customer_ID, customers.Customer_Name " +
+                    "ORDER BY count DESC " +
+                    "LIMIT 10;";
             PreparedStatement stmt = DatabaseConnection.getConnection().prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 

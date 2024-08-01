@@ -8,15 +8,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 
@@ -34,7 +34,8 @@ public class WeeklyApptsController implements Initializable {
     @FXML
     TableColumn<Appointment, Integer> wklyTVApptIDColumn, wklyTVCustIDColumn, wklyTVUserIDColumn;
     @FXML TableColumn<Appointment, String> wklyTVTitleColumn, wklyTVDescriptColumn, wklyTVLocColumn,
-            wklyTVContactColumn, wklyTVTypeColumn, wklyTVStartColumn, wklyTVEndColumn;
+            wklyTVContactColumn, wklyTVTypeColumn;
+    @FXML TableColumn<Appointment, LocalDateTime> wklyTVStartColumn, wklyTVEndColumn;
     @FXML
     Button wklyGetApptsBtn, wklyHomeBtn;
     @FXML
@@ -45,6 +46,9 @@ public class WeeklyApptsController implements Initializable {
     String date;
 
     ObservableList<Appointment> wklyAppts;
+
+    //User's local time zone
+    ZoneId userZoneId = ZoneId.systemDefault();
 
 
     /** initialize
@@ -109,10 +113,39 @@ public class WeeklyApptsController implements Initializable {
         wklyTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         wklyTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         wklyTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        wklyTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-        wklyTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         wklyTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         wklyTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        // Custom cell factories for date time columns
+        wklyTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        wklyTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty){
+                super.updateItem(item, empty);
+                if (empty || item == null){
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userStartZonedDateTime.format(DBAppointment.formatter));
+                }
+            }
+        });
+        wklyTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        wklyTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty){
+                super.updateItem(item, empty);
+                if (empty || item == null){
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userEndZonedDateTime.format(DBAppointment.formatter));
+                }
+            }
+        });
+
         weeklyScreenTableView.setItems(wklyAppts);
     }
 
