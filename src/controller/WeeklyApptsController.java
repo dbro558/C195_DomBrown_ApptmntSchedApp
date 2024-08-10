@@ -1,6 +1,7 @@
 package controller;
 
 import DatabaseAccess.DBAppointment;
+import DatabaseAccess.DBCustomer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
@@ -59,7 +62,20 @@ public class WeeklyApptsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       
+
+        //Bind the columns to stretch with the TableView (Weekly Appointments)
+        wklyTVTitleColumn.prefWidthProperty().bind(weeklyScreenTableView.widthProperty().multiply(0.10));
+        wklyTVDescriptColumn.prefWidthProperty().bind(weeklyScreenTableView.widthProperty().multiply(0.25));
+        wklyTVLocColumn.prefWidthProperty().bind(weeklyScreenTableView.widthProperty().multiply(0.15));
+        wklyTVTypeColumn.prefWidthProperty().bind(weeklyScreenTableView.widthProperty().multiply(0.15));
+        wklyTVContactColumn.prefWidthProperty().bind(weeklyScreenTableView.widthProperty().multiply(0.10));
+
+
+        weeklyScreenTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                showAppointmentDetails(newSelection);
+            }
+        });
     }
 
     /** onActionHomeBtn
@@ -149,7 +165,39 @@ public class WeeklyApptsController implements Initializable {
         weeklyScreenTableView.setItems(wklyAppts);
     }
 
+    private void showAppointmentDetails(Appointment appointment) {
+        Stage dialog = new Stage();
+        dialog.setTitle("Appointment Details");
+
+        VBox dialogVbox = new VBox();
+        dialogVbox.setSpacing(10);
+        dialogVbox.setPadding(new Insets(10));
+
+        Label idLabel = new Label("Appointment ID: " + appointment.getAppointmentID());
+        Label customerLabel = new Label("Customer Name: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
+        Label titleLabel = new Label("Title: " + appointment.getTitle());
+        Label typeLabel = new Label("Type: " + appointment.getType());
+        Label startLabel = new Label("Start: " + appointment.getFormattedStartString());
+        Label endLabel = new Label("End: " + appointment.getFormattedEndString());
+        Label locationLabel = new Label("Location: " + appointment.getLocation());
+        Label contactLabel = new Label("Contact: " + appointment.getContactName());
+
+        TextArea descriptionArea = new TextArea(appointment.getDescription());
+        descriptionArea.setWrapText(true);
+        descriptionArea.setEditable(false);
+        descriptionArea.setPrefHeight(100);
+
+        dialogVbox.getChildren().addAll(idLabel, customerLabel, titleLabel, typeLabel, new Label("Description:"), descriptionArea,
+                startLabel, endLabel, locationLabel, contactLabel);
+
+        Scene dialogScene = new Scene(dialogVbox, 400, 300);
+        dialog.setScene(dialogScene);
+        dialog.setResizable(true);
+        dialog.show();
+    }
+
     @FXML
     private void onActionWklyDatePicker(ActionEvent event) {
     }
+
 }

@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Appointment;
 
@@ -50,7 +51,13 @@ public class LoginController implements Initializable {
     @FXML
     private Button loginBtn, cancelBtn;
     @FXML
+    private ImageView ouijaIcon;
+    @FXML
     private ImageView handIcon;
+    @FXML
+    private VBox leftVBox;
+    @FXML
+    private VBox centerVBox;
 
     Stage stage;
     Parent scene;
@@ -75,6 +82,12 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Ensure the ImageView resizes dynamically with the window
+        ouijaIcon.fitHeightProperty().bind(leftVBox.heightProperty().multiply(2.0));
+        ouijaIcon.fitWidthProperty().bind(leftVBox.widthProperty().multiply(0.8));
+        handIcon.fitHeightProperty().bind(centerVBox.heightProperty().multiply(0.3));
+        handIcon.fitWidthProperty().bind(centerVBox.widthProperty().multiply(0.3));
+
         this.locale = Locale.getDefault();
         this.rb = ResourceBundle.getBundle("resources/languages/LabelsBundle", locale);
         this.consultingFirmLabel.setText(this.rb.getString("loginglobcons"));

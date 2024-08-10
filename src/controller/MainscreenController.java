@@ -2,6 +2,7 @@ package controller;
 
 import Database.DatabaseConnection;
 import DatabaseAccess.DBAppointment;
+import DatabaseAccess.DBCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import model.Appointment;
 
@@ -42,8 +45,8 @@ public class MainscreenController implements Initializable {
     @FXML Button mainscreenAddBtn, mainscreenUpdateBtn, mainscreenDeleteBtn, mainscreenReportsBtn, mainscreenCustomersBtn, mainscreenLogoutBtn;
     @FXML ToggleGroup toggleGroup1;
 
-    Stage stage;
-    Parent scene;
+    private Stage stage;
+    private Parent scene;
 
     ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
     ObservableList<Appointment> upcomingAppts = DBAppointment.getAllAppointmentsRefresh();
@@ -65,53 +68,110 @@ public class MainscreenController implements Initializable {
         mainScreenTableView.getItems().clear();
         allAppts = DBAppointment.getAllAppointments();
 
+        // Bind the columns to stretch with the TableView (Appointments)
+        mainscreenTVApptIDColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.05));
+        mainscreenTVTitleColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.10));
+        mainscreenTVDescriptColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.20));
+        mainscreenTVLocColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.10));
+        mainscreenTVTypeColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.15));
+        mainscreenTVContactColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.10));
+        mainscreenTVCustIDColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.05));
+        mainscreenTVUserIDColumn.prefWidthProperty().bind(mainScreenTableView.widthProperty().multiply(0.05));
+
 
         //put default tableview view in here (displays all of this month's appointments from today's date)
 
-            mainscreenTVApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-            mainscreenTVTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-            mainscreenTVDescriptColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-            mainscreenTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-            mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-            mainscreenTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-            mainscreenTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-            mainscreenTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        mainscreenTVApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        mainscreenTVTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        mainscreenTVDescriptColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        mainscreenTVLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        mainscreenTVContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        mainscreenTVTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        mainscreenTVCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        mainscreenTVUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-            //Custom cell factories for date/time columns
-            mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-            mainscreenTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
-                @Override
-                protected void updateItem(LocalDateTime item, boolean empty){
-                    super.updateItem(item, empty);
-                    if (empty || item == null){
-                        setText(null);
-                    } else {
-                        //Convert from UTC to user's LocalDateTime
-                        ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
-                        setText(userStartZonedDateTime.format(DBAppointment.formatter));
-                    }
+        //Custom cell factories for date/time columns
+        mainscreenTVStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        mainscreenTVStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userStartZonedDateTime.format(DBAppointment.formatter));
                 }
-            });
-            mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
-            mainscreenTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
-                @Override
-                protected void updateItem(LocalDateTime item, boolean empty){
-                    super.updateItem(item, empty);
-                    if (empty || item == null){
-                        setText(null);
-                    } else {
-                        //Convert from UTC to user's LocalDateTime
-                        ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
-                        setText(userEndZonedDateTime.format(DBAppointment.formatter));
-                    }
+            }
+        });
+        mainscreenTVEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        mainscreenTVEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    //Convert from UTC to user's LocalDateTime
+                    ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                    setText(userEndZonedDateTime.format(DBAppointment.formatter));
                 }
-            });
+            }
+        });
 
 
         mainScreenTableView.setItems(allAppts);
 
+        // Add listener for row selection
+        mainScreenTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                showAppointmentDetails(newSelection);
+            }
+        });
 
     }
+
+    /** Method to set the stage for this controller */
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    /** Method to display appointment details when TableView row is selected */
+    private void showAppointmentDetails(Appointment appointment) {
+        // Create and display a popup with appointment details
+        Stage dialog = new Stage();
+        dialog.setTitle("Appointment Details");
+
+        VBox dialogVbox = new VBox();
+        dialogVbox.setSpacing(10);
+        dialogVbox.setPadding(new Insets(10));
+
+        Label idLabel = new Label("Appointment ID: " + appointment.getAppointmentID());
+        Label customerLabel = new Label("Customer Name: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
+        Label titleLabel = new Label("Title: " + appointment.getTitle());
+        Label typeLabel = new Label("Type: " + appointment.getType());
+        Label startLabel = new Label("Start: " + appointment.getFormattedStartString());
+        Label endLabel = new Label("End: " + appointment.getFormattedEndString());
+        Label locationLabel = new Label("Location: " + appointment.getLocation());
+        Label contactLabel = new Label("Contact: " + appointment.getContactName());
+
+        // Use TextArea for description to handle longer strings
+        TextArea descriptionArea = new TextArea(appointment.getDescription());
+        descriptionArea.setWrapText(true);
+        descriptionArea.setEditable(false);
+        descriptionArea.setPrefHeight(100); // Adjust the height as needed
+
+
+        dialogVbox.getChildren().addAll(idLabel, customerLabel, titleLabel, typeLabel, descriptionArea, startLabel, endLabel,
+                locationLabel, contactLabel);
+
+        Scene dialogScene = new Scene(dialogVbox, 400, 300);
+        dialog.setScene(dialogScene);
+        dialog.setResizable(true); // Allow resizing
+        dialog.show();
+    }
+
 
      /** onActionApptsAllRadBtn
      * ActionEvent performed when radio button is clicked.

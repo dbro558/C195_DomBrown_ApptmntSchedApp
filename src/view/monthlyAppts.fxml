@@ -17,7 +17,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TableView fx:id="moScreenTableView" prefHeight="720.0" prefWidth="1078.0">
+                  <TableView fx:id="moScreenTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="moTVApptIDColumn" prefWidth="57.0" text="Appt ID" />
                         <TableColumn fx:id="moTVTitleColumn" prefWidth="93.0" text="Title" />

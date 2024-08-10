@@ -409,7 +409,7 @@ public class AddController implements Initializable {
     @FXML
     private void onActionAddUserComboBox(ActionEvent event) {
 
-        System.out.println(addUserComboBox.getValue().toString());
+        System.out.println(addUserComboBox.getValue());
     }
 
     @FXML
