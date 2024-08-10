@@ -2,20 +2,26 @@ package controller;
 
 import DatabaseAccess.DBAppointment;
 import DatabaseAccess.DBContact;
+import DatabaseAccess.DBCustomer;
 import DatabaseAccess.DBReports;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.MonthlyTypeCountReport;
 import model.VIPReport;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -71,10 +77,51 @@ public class ReportsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //listener to adjust column widths when the TableView's width changes
+        reportsTCTableView.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                adjustColumnWidths();
+            }
+        });
+
+        //Bind the columns to stretch with the TableView (Appointments by Contact)
+        reportsApptIDColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.05));
+        reportsTitleColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.15));
+        reportsDescriptionColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.25));
+        reportsTypeColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.15));
+        reportsStartColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.15));
+        reportsEndColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.15));
+        reportsCustIDColumn.prefWidthProperty().bind(reportsApptsByContactTableView.widthProperty().multiply(0.05));
+
+        // Bind the columns to stretch with the TableView (VIP)
+        reportsVIPCustIDColumn.prefWidthProperty().bind(reportsVIPTableView.widthProperty().multiply(0.30));
+        reportsVIPCustNameColumn.prefWidthProperty().bind(reportsVIPTableView.widthProperty().multiply(0.35));
+        reportsVIPCountTableColumn.prefWidthProperty().bind(reportsVIPTableView.widthProperty().multiply(0.35));
+
+
+
         reportsContactSchedComboBox.setItems(contactList);
         reportsScheduleLabel.setVisible(false);
 
+        reportsApptsByContactTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                showAppointmentDetails(newSelection);
+            }
+        });
+
     }
+
+    private void adjustColumnWidths() {
+        double totalWidth = reportsTCTableView.getWidth();
+        double columnWidth = totalWidth / 4;
+
+        reportsTCYearTableColumn.setPrefWidth(columnWidth);
+        reportsTCMonthTableColumn.setPrefWidth(columnWidth);
+        reportsTCTypeTableColumn.setPrefWidth(columnWidth);
+        reportsTCCountTableColumn.setPrefWidth(columnWidth);
+    }
+
 
     /** onActionReportsTypeCountBtn
      * ActionEvent performed when reportsTypeCountBtn is clicked.
@@ -190,5 +237,36 @@ public class ReportsController implements Initializable {
         reportsVIPCountTableColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
         reportsVIPTableView.setItems(vipList);
 
+    }
+
+    private void showAppointmentDetails(Appointment appointment) {
+        Stage dialog = new Stage();
+        dialog.setTitle("Appointment Details");
+
+        VBox dialogVbox = new VBox();
+        dialogVbox.setSpacing(10);
+        dialogVbox.setPadding(new Insets(10));
+
+        Label idLabel = new Label("Appointment ID: " + appointment.getAppointmentID());
+        Label customerLabel = new Label("Customer Name: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
+        Label titleLabel = new Label("Title: " + appointment.getTitle());
+        Label typeLabel = new Label("Type: " + appointment.getType());
+        Label startLabel = new Label("Start: " + appointment.getFormattedStartString());
+        Label endLabel = new Label("End: " + appointment.getFormattedEndString());
+        //Label locationLabel = new Label("Location: " + appointment.getLocation());
+        //Label contactLabel = new Label("Contact: " + appointment.getContactName());
+
+        TextArea descriptionArea = new TextArea(appointment.getDescription());
+        descriptionArea.setWrapText(true);
+        descriptionArea.setEditable(false);
+        descriptionArea.setPrefHeight(100);
+
+        dialogVbox.getChildren().addAll(idLabel, customerLabel, titleLabel, typeLabel, new Label("Description:"), descriptionArea,
+                startLabel, endLabel);
+
+        Scene dialogScene = new Scene(dialogVbox, 400, 300);
+        dialog.setScene(dialogScene);
+        dialog.setResizable(true);
+        dialog.show();
     }
 }

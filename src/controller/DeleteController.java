@@ -79,6 +79,25 @@ public class DeleteController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // Bind the columns to stretch with the TableView (Customers)
+        deleteCustCustomerIDColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.05));
+        deleteCustCustomerNameColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.25));
+        deleteCustAddressColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.20));
+        deleteCustFLDivisionColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.15));
+        deleteCustCountryColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.15));
+        deleteCustPhoneColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.10));
+        deleteCustPostalColumn.prefWidthProperty().bind(deleteCustTableView.widthProperty().multiply(0.10));
+
+        //Bind the columns to stretch with the TableView (Appointments)
+        deleteApptIDColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.05));
+        deleteTitleColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.15));
+        deleteDescriptionColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.20));
+        deleteLocationColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.15));
+        deleteStartColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.10));
+        deleteEndColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.10));
+        deleteTypeColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.15));
+        deleteContactColumn.prefWidthProperty().bind(deleteTableView.widthProperty().multiply(0.10));
+
         deleteChooseComboBox.setItems(choiceList);
         deleteSelectCustomerComboBox.setVisible(false);
         deleteSelectCustomerComboBox.setItems(allCustomerNames);

@@ -19,7 +19,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #a202ff;">
                <children>
-                  <TableView fx:id="deleteCustTableView" prefHeight="58.0" prefWidth="1078.0">
+                  <TableView fx:id="deleteCustTableView" prefHeight="58.0" prefWidth="1078.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="deleteCustCustomerIDColumn" prefWidth="75.0" text="Customer ID" />
                         <TableColumn fx:id="deleteCustCustomerNameColumn" prefWidth="182.0" text="Customer Name" />
@@ -30,7 +30,7 @@
                         <TableColumn fx:id="deleteCustPostalColumn" prefWidth="101.0" text="Postal" />
                      </columns>
                   </TableView>
-                  <TableView fx:id="deleteTableView" layoutY="67.0" prefHeight="233.0" prefWidth="1078.0">
+                  <TableView fx:id="deleteTableView" layoutY="67.0" prefHeight="233.0" prefWidth="1078.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="deleteApptIDColumn" prefWidth="60.0" text="Appt ID" />
                         <TableColumn fx:id="deleteTitleColumn" prefWidth="95.0" text="Title" />

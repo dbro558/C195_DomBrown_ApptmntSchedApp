@@ -12,8 +12,8 @@
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1180.0" style="-fx-background-color: #a202ff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
-  <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #a202ff;">
+   <items>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #a202ff;" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <ImageView fx:id="reportsOuijaIconImageView" fitHeight="216.0" fitWidth="200.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -30,32 +30,34 @@
             <ComboBox fx:id="reportsContactSchedComboBox" layoutX="57.0" layoutY="423.0" onAction="#onActionReportsContactSchedComboBox" prefHeight="25.0" prefWidth="199.0" promptText="Schedules by Contact" />
             <Button fx:id="reportsTypeCountBtn" layoutX="57.0" layoutY="310.0" mnemonicParsing="false" onAction="#onActionReportsTypeCountBtn" prefWidth="199.0" text="Count of&#10;Appointments by&#10;Month and Type" textAlignment="CENTER" />
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TableView fx:id="reportsTCTableView" prefHeight="178.0" prefWidth="900.0">
+            <TableView fx:id="reportsTCTableView" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="300.0">
                <columns>
-                  <TableColumn fx:id="reportsTCYearTableColumn" prefWidth="142.0" text="Year" />
-                  <TableColumn fx:id="reportsTCMonthTableColumn" prefWidth="246.0" text="Month" />
-                  <TableColumn fx:id="reportsTCTypeTableColumn" prefWidth="310.0" text="Type" />
-                  <TableColumn fx:id="reportsTCCountTableColumn" prefWidth="164.0" text="Count" />
+                  <TableColumn fx:id="reportsTCYearTableColumn" text="Year" />
+                  <TableColumn fx:id="reportsTCMonthTableColumn" text="Month" />
+                  <TableColumn fx:id="reportsTCTypeTableColumn" text="Type" />
+                  <TableColumn fx:id="reportsTCCountTableColumn" text="Count" />
                </columns>
             </TableView>
-            <TableView fx:id="reportsApptsByContactTableView" layoutX="-4.0" layoutY="207.0" prefHeight="326.0" prefWidth="900.0">
+
+            <TableView fx:id="reportsApptsByContactTableView" AnchorPane.topAnchor="310.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="305.0">
                <columns>
-                  <TableColumn fx:id="reportsApptIDColumn" prefWidth="60.0" text="Appt ID" />
-                  <TableColumn fx:id="reportsTitleColumn" prefWidth="78.0" text="Title" />
-                  <TableColumn fx:id="reportsDescriptionColumn" prefWidth="120.0" text="Description" />
-                  <TableColumn fx:id="reportsTypeColumn" prefWidth="162.0" text="Type" />
-                  <TableColumn fx:id="reportsStartColumn" prefWidth="150.0" text="Start" />
-                  <TableColumn fx:id="reportsEndColumn" prefWidth="150.0" text="End" />
-                  <TableColumn fx:id="reportsCustIDColumn" prefWidth="110.0" text="Customer ID" />
+                  <TableColumn fx:id="reportsApptIDColumn" text="Appt ID" />
+                  <TableColumn fx:id="reportsTitleColumn" text="Title" />
+                  <TableColumn fx:id="reportsDescriptionColumn" text="Description" />
+                  <TableColumn fx:id="reportsTypeColumn" text="Type" />
+                  <TableColumn fx:id="reportsStartColumn" text="Start" />
+                  <TableColumn fx:id="reportsEndColumn" text="End" />
+                  <TableColumn fx:id="reportsCustIDColumn" text="Customer ID" />
                </columns>
             </TableView>
-            <TableView fx:id="reportsVIPTableView" layoutX="-4.0" layoutY="561.0" prefHeight="157.0" prefWidth="900.0">
+
+            <TableView fx:id="reportsVIPTableView" AnchorPane.topAnchor="625.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="300.0">
                <columns>
-                  <TableColumn fx:id="reportsVIPCustIDColumn" prefWidth="170.0" text="VIP Customer ID" />
-                  <TableColumn fx:id="reportsVIPCustNameColumn" prefWidth="226.0" text="VIP Customer Name" />
-                  <TableColumn fx:id="reportsVIPCountTableColumn" prefWidth="438.0" text="Number of Appointments Booked This Month" />
+                  <TableColumn fx:id="reportsVIPCustIDColumn" text="VIP Customer ID" />
+                  <TableColumn fx:id="reportsVIPCustNameColumn" text="VIP Customer Name" />
+                  <TableColumn fx:id="reportsVIPCountTableColumn" text="Number of Appointments Booked This Month" />
                </columns>
             </TableView>
             <Label fx:id="reportsScheduleLabel" layoutY="187.0" text="Label" textFill="WHITE">
@@ -64,5 +66,5 @@
                </font>
             </Label>
          </children></AnchorPane>
-  </items>
+   </items>
 </SplitPane>

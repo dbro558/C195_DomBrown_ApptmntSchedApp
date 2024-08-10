@@ -53,6 +53,15 @@ public class CustomersController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // Bind the columns to stretch with the TableView (Customers)
+        custIDTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.05));
+        custNameTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.25));
+        custAddressTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.20));
+        custDivisionTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.15));
+        custCountryTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.15));
+        custPostalTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.10));
+        custPhoneTableColumn.prefWidthProperty().bind(customersTableView.widthProperty().multiply(0.10));
+
         allCusts = DBCustomer.getAllCustomers();
         //set items in table view with customers' data
         custIDTableColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));

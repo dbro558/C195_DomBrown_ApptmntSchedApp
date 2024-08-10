@@ -1,6 +1,7 @@
 package controller;
 
 import DatabaseAccess.DBAppointment;
+import DatabaseAccess.DBCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import model.Appointment;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -66,8 +70,21 @@ public class MonthlyApptsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //Bind the columns to stretch with the TableView (Monthly Appointments)
+        moTVTitleColumn.prefWidthProperty().bind(moScreenTableView.widthProperty().multiply(0.10));
+        moTVDescriptColumn.prefWidthProperty().bind(moScreenTableView.widthProperty().multiply(0.25));
+        moTVLocColumn.prefWidthProperty().bind(moScreenTableView.widthProperty().multiply(0.15));
+        moTVTypeColumn.prefWidthProperty().bind(moScreenTableView.widthProperty().multiply(0.15));
+        moTVContactColumn.prefWidthProperty().bind(moScreenTableView.widthProperty().multiply(0.10));
+
         MoMonthCombo.setItems(monthList);
         moYearCombo.setItems(yearList);
+
+        moScreenTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                showAppointmentDetails(newSelection);
+            }
+        });
 
     }
 
@@ -169,4 +186,34 @@ public class MonthlyApptsController implements Initializable {
     }
 
 
+     private void showAppointmentDetails(Appointment appointment) {
+         Stage dialog = new Stage();
+         dialog.setTitle("Appointment Details");
+
+         VBox dialogVbox = new VBox();
+         dialogVbox.setSpacing(10);
+         dialogVbox.setPadding(new Insets(10));
+
+         Label idLabel = new Label("Appointment ID: " + appointment.getAppointmentID());
+         Label customerLabel = new Label("Customer Name: " + DBCustomer.getSingleCustomerName(appointment.getCustomerID()));
+         Label titleLabel = new Label("Title: " + appointment.getTitle());
+         Label typeLabel = new Label("Type: " + appointment.getType());
+         Label startLabel = new Label("Start: " + appointment.getFormattedStartString());
+         Label endLabel = new Label("End: " + appointment.getFormattedEndString());
+         Label locationLabel = new Label("Location: " + appointment.getLocation());
+         Label contactLabel = new Label("Contact: " + appointment.getContactName());
+
+         TextArea descriptionArea = new TextArea(appointment.getDescription());
+         descriptionArea.setWrapText(true);
+         descriptionArea.setEditable(false);
+         descriptionArea.setPrefHeight(100);
+
+         dialogVbox.getChildren().addAll(idLabel, customerLabel, titleLabel, typeLabel, new Label("Description:"), descriptionArea,
+                 startLabel, endLabel, locationLabel, contactLabel);
+
+         Scene dialogScene = new Scene(dialogVbox, 400, 300);
+         dialog.setScene(dialogScene);
+         dialog.setResizable(true);
+         dialog.show();
+     }
 }

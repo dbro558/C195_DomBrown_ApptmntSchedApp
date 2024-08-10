@@ -122,6 +122,20 @@ public class UpdateController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // Bind the columns to stretch with the TableView (Appointments)
+        updateTitleColumn.prefWidthProperty().bind(updateApptTableView.widthProperty().multiply(0.15));
+        updateDescriptionColumn.prefWidthProperty().bind(updateApptTableView.widthProperty().multiply(0.25));
+        updateLocationColumn.prefWidthProperty().bind(updateApptTableView.widthProperty().multiply(0.15));
+        updateTypeColumn.prefWidthProperty().bind(updateApptTableView.widthProperty().multiply(0.15));
+
+        //Bind the columns to stretch with the TableView (Customers)
+        updateCustCustomerIDColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.10));
+        updateCustCustomerNameColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.20));
+        updateCustAddressColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.30));
+        updateCustFLDivisionColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.20));
+        updateCustPhoneColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.10));
+        updateCustPostalColumn.prefWidthProperty().bind(updateCustTableView.widthProperty().multiply(0.10));
+
         //set Choice(Appointment or Customer), Country, Contact, and User combo box items
         updateChooseComboBox.setItems(choiceList);
         updateCountryComboBox.setItems(allCountries);
@@ -780,31 +794,33 @@ public class UpdateController implements Initializable {
             }
             chosenDate = updateApptDatePicker.getValue();
 
+
             //LocalTime versions of start/end combo box values
             int startInt = Integer.parseInt(updateStartComboBox.getSelectionModel().getSelectedItem().toString());
             String startS = TimeControls.convertComboTimeValue(startInt);
-            startTime = LocalTime.parse(startS);
+            LocalTime startTime = LocalTime.parse(startS);
             int endInt = Integer.parseInt(updateEndComboBox.getSelectionModel().getSelectedItem().toString());
             String endS = TimeControls.convertComboTimeValue(endInt);
-            endTime = LocalTime.parse(endS);
+            LocalTime endTime = LocalTime.parse(endS);
 
             //create LocalDateTime from chosenDate and start/end times
             LocalDateTime startDateTime = LocalDateTime.of(chosenDate, startTime);
             LocalDateTime endDateTime = LocalDateTime.of(chosenDate, endTime);
 
-            //user's zoned date time
-            ZonedDateTime startZDT = ZonedDateTime.of(startDateTime, ZoneId.systemDefault());
-            ZonedDateTime endZDT = ZonedDateTime.of(endDateTime, ZoneId.systemDefault());
+            //Convert LocalDateTime from EST to UTC
+            ZoneId estZoneId = ZoneId.of("America/New_York"); //establish ZoneId of New York for EST
+            ZonedDateTime startDateTimeEST = startDateTime.atZone(estZoneId); //this ensures EST start times
+            //System.out.println("LDT startDateTime (used to compare against dbLDT in validateOverlap): " + startDateTimeEST);
+            ZonedDateTime endDateTimeEST = endDateTime.atZone(estZoneId);
+            //System.out.println("LDT endDateTime (used to compare against dbLDT in validateOverlap): " + endDateTimeEST);
 
-            //user's time input to EST
-            ZonedDateTime startInput = startZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
-            ZonedDateTime endInput = endZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+            //Convert to UTC
+            ZonedDateTime startUTC = startDateTimeEST.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = endDateTimeEST.withZoneSameInstant(ZoneId.of("UTC"));
 
-            //Hour values from EST version of user's input times (used to check against business hours)
-            LocalTime startLT = startInput.toLocalTime();
-            LocalTime endLT = endInput.toLocalTime();
-            System.out.println("LocalTime of EST start ZDT: " + startLT);
-            System.out.println("LocalTime of EST end ZDT: " + endLT);
+            LocalDateTime start = startUTC.toLocalDateTime(); //changed from startZDT.toLocalDateTime()
+            LocalDateTime end = endUTC.toLocalDateTime(); //changed from endZDT.toLocalDateTime()
+
 
             //Business hours
             ZonedDateTime bizStart = ZonedDateTime.of(chosenDate, LocalTime.of(8, 0), ZoneId.of("America/New_York"));
@@ -812,15 +828,11 @@ public class UpdateController implements Initializable {
             LocalTime bizStartLT = bizStart.toLocalTime();
             LocalTime bizEndLT = bizEnd.toLocalTime();
 
-            //to UTC unnecessary
-            ZonedDateTime startUTC = startZDT.withZoneSameInstant(ZoneId.of("UTC"));
-            ZonedDateTime endUTC = endZDT.withZoneSameInstant(ZoneId.of("UTC"));
+            //check business hours
+            LocalTime startLT = startDateTime.toLocalTime();//changed from startZDT
+            LocalTime endLT = endDateTime.toLocalTime();//changed from endZDT
 
-            //formatted string
-            LocalDateTime start = startUTC.toLocalDateTime();//changed from startZDT
-            LocalDateTime end = endUTC.toLocalDateTime();//changed from endZDT
-
-            invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
+            boolean invalidBizHrs = validateBizHours(startLT, endLT, bizStartLT, bizEndLT);
             if (invalidBizHrs) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Business Hours Error");
@@ -839,7 +851,7 @@ public class UpdateController implements Initializable {
             }
 
 
-            overlap = validateOverlap(customerName, startDateTime, endDateTime);
+            overlap = validateOverlap(customerName, start, end);
             if (overlap) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Overlapping Appointment Error");
