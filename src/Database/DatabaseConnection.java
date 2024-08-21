@@ -22,8 +22,8 @@ public class DatabaseConnection {
 
     private static final String MYSQLJDBCDRIVER = "com.mysql.jdbc.Driver";
 
-    private static final String databaseUserName = "root";
-    private static final String databaseUserPassword = "19Berwanger76!";
+    private static final String databaseUserName = "*****";
+    private static final String databaseUserPassword = "********";
 
     private static Connection conn = null;
 
