@@ -220,6 +220,7 @@ public class ReportsController implements Initializable {
             reportsScheduleLabel.setText("Now viewing " + contactName + "'s schedule");
             reportsScheduleLabel.setVisible(true);
 
+
     }
 
     /** onActionReportsVIPBtn

@@ -737,7 +737,7 @@ public class AddController implements Initializable {
                 alert.setHeaderText("All Canadian postal codes must be 6 characters long.");
                 alert.showAndWait();
             }
-            else if (addCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && postal.length() >5){
+            else if (addCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && postal.length() < 5){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Postal Code Error");
                 alert.setHeaderText("All UK postal codes must be between 5 and 7 characters long.");
