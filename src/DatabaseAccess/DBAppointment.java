@@ -272,7 +272,7 @@ public class DBAppointment {
                 Timestamp apptEnd = rs.getTimestamp("End");
                 LocalDateTime ldtEnd = apptEnd.toLocalDateTime();
                 ZonedDateTime zEnd2 = ldtEnd.atZone(ZoneId.systemDefault());
-                LocalDateTime end = zStart2.toLocalDateTime();
+                LocalDateTime end = zEnd2.toLocalDateTime();
                 Timestamp createDate = rs.getTimestamp("Create_Date");
                 String createdBy = rs.getString("Created_By");
                 Timestamp lastUp = rs.getTimestamp("Last_Update");

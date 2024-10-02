@@ -100,13 +100,58 @@ public class ReportsController implements Initializable {
         reportsVIPCountTableColumn.prefWidthProperty().bind(reportsVIPTableView.widthProperty().multiply(0.35));
 
 
-
+        //listener to populate reportsApptsByContactTableView with appointment data of selected contact from reportsContactSchedComboBox
         reportsContactSchedComboBox.setItems(contactList);
         reportsScheduleLabel.setVisible(false);
 
         reportsApptsByContactTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showAppointmentDetails(newSelection);
+            }
+        });
+
+        reportsContactSchedComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                apptsByContactList.clear();
+                apptsByContactList = DBAppointment.getAllAppointmentsByContact(String.valueOf(newValue));
+
+                reportsApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+                reportsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+                reportsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+                reportsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+                reportsCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+
+                // Custom cell factories for date time columns
+                reportsStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+                reportsStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>() {
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                            setText(userStartZonedDateTime.format(DBAppointment.formatter));
+                        }
+                    }
+                });
+                reportsEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+                reportsEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>() {
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
+                            setText(userEndZonedDateTime.format(DBAppointment.formatter));
+                        }
+                    }
+                });
+
+                reportsApptsByContactTableView.setItems(apptsByContactList);
+                reportsScheduleLabel.setText("Now viewing " + newValue + "'s schedule");
+                reportsScheduleLabel.setVisible(true);
             }
         });
 
@@ -171,54 +216,9 @@ public class ReportsController implements Initializable {
     @FXML
     public void onActionReportsContactSchedComboBox(ActionEvent event) {
 
-            String contactName = reportsContactSchedComboBox.getSelectionModel().getSelectedItem().toString();
-            reportsContactSchedComboBox.getSelectionModel()
-                    .selectedItemProperty()
-                    .addListener((observable, oldValue, newValue) -> {
-                        apptsByContactList.clear();
-                        apptsByContactList = DBAppointment.getAllAppointmentsByContact(String.valueOf(newValue));
-
-                        reportsApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-                        reportsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-                        reportsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-                        reportsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-                        reportsCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-
-                        // Custom cell factories for date time columns
-                        reportsStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-                        reportsStartColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
-                            @Override
-                            protected void updateItem(LocalDateTime item, boolean empty){
-                                super.updateItem(item, empty);
-                                if (empty || item == null){
-                                    setText(null);
-                                } else {
-                                    //Convert from UTC to user's LocalDateTime
-                                    ZonedDateTime userStartZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
-                                    setText(userStartZonedDateTime.format(DBAppointment.formatter));
-                                }
-                            }
-                        });
-                        reportsEndColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
-                        reportsEndColumn.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>(){
-                            @Override
-                            protected void updateItem(LocalDateTime item, boolean empty){
-                                super.updateItem(item, empty);
-                                if (empty || item == null){
-                                    setText(null);
-                                } else {
-                                    //Convert from UTC to user's LocalDateTime
-                                    ZonedDateTime userEndZonedDateTime = item.atZone(ZoneId.of("UTC")).withZoneSameInstant(userZoneId);
-                                    setText(userEndZonedDateTime.format(DBAppointment.formatter));
-                                }
-                            }
-                        });
-
-
-                        reportsApptsByContactTableView.setItems(apptsByContactList);
-                    });
-            reportsScheduleLabel.setText("Now viewing " + contactName + "'s schedule");
-            reportsScheduleLabel.setVisible(true);
+        String contactName = reportsContactSchedComboBox.getSelectionModel().getSelectedItem().toString();
+        reportsScheduleLabel.setText("Now viewing " + contactName + "'s schedule");
+        reportsScheduleLabel.setVisible(true);
 
     }
 

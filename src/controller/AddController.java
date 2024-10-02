@@ -195,12 +195,42 @@ public class AddController implements Initializable {
             addPhoneTxtField.setText(newValue.replaceAll("[^\\d]", ""));//listener that allows only numbers and hyphens
         });
 
-        addPostalTxtField.textProperty().addListener((observable, oldValue, newValue) -> { //lambda 4
-            if (newValue.matches("\\d*")) {
-                return;
+        addPostalTxtField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedCountry = addCountryComboBox.getSelectionModel().getSelectedItem();
+            boolean isStateProvinceSelected = addStateProvinceComboBox.getValue() != null;
+
+            if (selectedCountry != null && isStateProvinceSelected) {
+                switch (selectedCountry) {
+                    case "U.S.":
+                        addPostalTxtField.setEditable(true);
+                        addPostalTxtField.setTextFormatter(new TextFormatter<>(c ->
+                                c.getControlNewText().matches("\\d{0,5}") ? c : null));
+                        break;
+
+                    case "UK":
+                        addPostalTxtField.setEditable(true);
+                        addPostalTxtField.setTextFormatter(new TextFormatter<>(c ->
+                                c.getControlNewText().matches("[A-Z0-9]{0,4} ?[A-Z0-9]{0,3}") ? c : null));
+                        break;
+
+                    case "Canada":
+                        addPostalTxtField.setEditable(true);
+                        addPostalTxtField.setTextFormatter(new TextFormatter<>(c ->
+                                c.getControlNewText().matches("^(?!.*[DFIOQU])[A-VXY]?[0-9]?[A-Z]? ?[0-9]?[A-Z]?[0-9]?$") ? c : null));
+                        break;
+
+                    default:
+                        addPostalTxtField.setEditable(false);
+                        addPostalTxtField.setTextFormatter(null);
+                        break;
+                }
+            } else {
+                addPostalTxtField.setEditable(false);
+                addPostalTxtField.setTextFormatter(null);
             }
-            addPostalTxtField.setText(newValue.replaceAll("[^\\d]", ""));//listener that allows only numbers
         });
+
+
 
     }
 
@@ -347,14 +377,6 @@ public class AddController implements Initializable {
     @FXML
     private void onActionAddStateProvinceComboBox(ActionEvent event) throws IOException {
 
-        if(addCountryComboBox.getSelectionModel().getSelectedItem() != "UK" && addStateProvinceComboBox.getValue() != null) {
-            addPostalTxtField.setEditable(true);
-            addPostalTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("^|\\d{0,5}") ? c : null));//lambda 7
-        }
-        else if (addCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && addStateProvinceComboBox.getValue() != null) {
-            addPostalTxtField.setEditable(true);
-            addPostalTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("^|[a-zA-Z0-9]{0,5}$") ? c : null));//lambda 8
-        }
     }
 
     @FXML
@@ -404,6 +426,7 @@ public class AddController implements Initializable {
             addPhoneTxtField.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches( //lambda 11
                     "^|[0-9]{0,10}") ? c : null));
         }
+
     }
 
     @FXML
@@ -702,10 +725,22 @@ public class AddController implements Initializable {
                 phone = phoneNum.replaceFirst("(\\d{2})(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3-$4");//format phone number for International (12-345-678-9000)
 
             String postal = addPostalTxtField.getText();
-            if (postal.length() < 5) {
+            if (addCountryComboBox.getSelectionModel().getSelectedItem() == "U.S." && postal.length() < 5) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Invalid Postal Code Error");
                 alert.setHeaderText("All U.S. postal codes must be 5 characters long.");
+                alert.showAndWait();
+            }
+            else if (addCountryComboBox.getSelectionModel().getSelectedItem() == "Canada" && postal.length() >6) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Postal Code Error");
+                alert.setHeaderText("All Canadian postal codes must be 6 characters long.");
+                alert.showAndWait();
+            }
+            else if (addCountryComboBox.getSelectionModel().getSelectedItem() == "UK" && postal.length() < 5){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Postal Code Error");
+                alert.setHeaderText("All UK postal codes must be between 5 and 7 characters long.");
                 alert.showAndWait();
             }
 

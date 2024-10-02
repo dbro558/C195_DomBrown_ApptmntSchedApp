@@ -340,7 +340,7 @@ public class UpdateController implements Initializable {
             updatePhoneTxtField.setEditable(false);
             updatePostalTxtField.setPromptText("Postal Code");
             updatePostalTxtField.setVisible(true);
-            updatePostalTxtField.setEditable(false);
+            updatePostalTxtField.setEditable(true);
             updateStateProvinceComboBox.setVisible(true);
             updateIDLabel.setVisible(true);
             updateIDLabel.setText("Customer ID");
