@@ -2,7 +2,6 @@ Project Title: C195_DomBrown_ApptmntSchedApp
 
  - Author: Dominique Brown-Gonzalez
  - Contact Information: dbro558@wgu.edu
- - Application Version: 1.0
 
 
 
@@ -24,7 +23,7 @@ Demonstrable outcomes of the program:
         Fictional consulting agency's business hours in EST
         UTC for insertion into database
     - Input validation and working with foreign key constraints
-    - At least 2 lambda expressions. This project uses a total of 28:
+    - At least 2 lambda expressions. This project uses a total of 28 (on initial project submittal date):
 
       AddController has 11
       at lines 158, 159, 190, 197, 210, 238, 351, 355, 391, 397, 403
