@@ -22,23 +22,23 @@ ________________________________________
 Application Layers
 
 1.	Presentation Layer (GUI)
- JavaFX & FXML: The user interface is built using JavaFX with FXML files defining various screens. For example:
- 	login.fxml – Handles user authentication.
- 	mainscreen.fxml – Main application dashboard.
- 	add.fxml, update.fxml, delete.fxml – For managing appointments and customer data.
- 	Additional FXML files for weekly and monthly appointment views and reports.
+ 	JavaFX & FXML: The user interface is built using JavaFX with FXML files defining various screens. For example:
+ 		login.fxml – Handles user authentication.
+ 		mainscreen.fxml – Main application dashboard.
+ 		add.fxml, update.fxml, delete.fxml – For managing appointments and customer data.
+ 		Additional FXML files for weekly and monthly appointment views and reports.
 
 2.	Business Logic Layer
-	Controller Classes: Located in the src/controller/ directory, these classes (e.g., LoginController.java, AddController.java, UpdateController.java, etc.) manage user      interactions, validate input, trigger business logic, and update the GUI. They also implement lambda expressions to streamline event handling and data processing.
-	Utility Classes: Classes such as TimeControls.java and Logger.java in the src/utils/ package assist with time zone conversions, logging, and other common functionalities.
+	Controller Classes: Located in the src/controller/ directory, these classes (e.g., LoginController.java, AddController.java, UpdateController.java, etc.) manage user interactions, validate input, trigger business logic, and update the GUI. They also implement lambda expressions to streamline event handling and data processing.
+	Utility Classes: Classes such as TimeControls.java and Logger.java in the src/utils/ package assist with time zone conversions, logging, and other common 	functionalities.
 
 3.	Data Access Layer
  	Database Connectivity: The DatabaseConnection.java class in the src/Database/ package manages JDBC connections to a MySQL database.
- 	Data Access Objects (DAO): The src/DatabaseAccess/ package contains classes (e.g., DBAppointment.java, DBCustomer.java, DBUser.java, etc.) that encapsulate SQL operations   and provide an interface to interact with the underlying database.
- 	Model Classes: Located in the src/model/ directory, these classes represent the core data entities (e.g., Appointment.java, Customer.java, User.java) and are used by both   the GUI and the data access layer.
+ 	Data Access Objects (DAO): The src/DatabaseAccess/ package contains classes (e.g., DBAppointment.java, DBCustomer.java, DBUser.java, etc.) that encapsulate SQL operations and provide an interface to interact with the underlying database.
+ 	Model Classes: Located in the src/model/ directory, these classes represent the core data entities (e.g., Appointment.java, Customer.java, User.java) and are used by both the GUI and the data access layer.
 
 4.	Internationalization
- 	Resource Bundles: The application uses property files located in src/resources/languages/ (e.g., LabelsBundle.properties for English and LabelsBundle_fr.properties for   French) to manage locale-specific text. When the application starts, it detects the user’s system language and loads the appropriate bundle, ensuring that all labels and  messages are displayed in the user’s language.
+ 	Resource Bundles: The application uses property files located in src/resources/languages/ (e.g., LabelsBundle.properties for English and 			LabelsBundle_fr.properties for French) to manage locale-specific text. When the application starts, it detects the user’s system language and loads the appropriate bundle, ensuring that all labels and  messages are displayed in the user’s language.
 
 ________________________________________
 
@@ -60,62 +60,62 @@ ________________________________________
 
  	Purpose: Manages the authentication process.
  
-  Key Functions:
- 	Validates user credentials via the DBUser class.
- 	Auto-detects and displays the user’s ZoneID on the login form.
- 	Retrieves and applies localized strings (English or French) from resource bundles.
- 	Triggers an alert if upcoming appointments are detected within 15 minutes.
+  	Key Functions:
+ 		Validates user credentials via the DBUser class.
+ 		Auto-detects and displays the user’s ZoneID on the login form.
+ 		Retrieves and applies localized strings (English or French) from resource bundles.
+ 		Triggers an alert if upcoming appointments are detected within 15 minutes.
 
 
 •	MainscreenController
 
  	Purpose: Serves as the application’s dashboard post-login.
  
-  Key Functions: Loads the primary user interface and navigation controls to access other features such as adding, updating, or deleting records.
+  	Key Functions: Loads the primary user interface and navigation controls to access other features such as adding, updating, or deleting records.
 
 
 •	AddController
 
  	Purpose: Facilitates the creation of new appointments and customer records.
  
-  Key Functions:
- 	Validates input data from the user.
- 	Uses lambda expressions (11 total in this controller) for event handling and streamlined data processing.
- 	Interacts with DBAppointment or DBCustomer to insert records into the database.
+  	Key Functions:
+ 		Validates input data from the user.
+ 		Uses lambda expressions (11 total in this controller) for event handling and streamlined data processing.
+ 		Interacts with DBAppointment or DBCustomer to insert records into the database.
 
 
 •	UpdateController
  
-  Purpose: Manages the update process for existing records.
+  	Purpose: Manages the update process for existing records.
  
-  Key Functions:
- 	Validates changes and triggers the corresponding DAO update methods.
- 	Employs 12 lambda expressions to handle user actions and validations efficiently.
+  	Key Functions:
+ 		Validates changes and triggers the corresponding DAO update methods.
+ 		Employs 12 lambda expressions to handle user actions and validations efficiently.
 
 
 •	DeleteController
  
-  Purpose: Enables deletion of appointments and customer data.
+  	Purpose: Enables deletion of appointments and customer data.
 
-  Key Functions:
- 	Prompts confirmation before deletion.
- 	Uses 4 lambda expressions to manage UI events and perform deletion operations via the respective DAO.
+  	Key Functions:
+ 		Prompts confirmation before deletion.
+ 		Uses 4 lambda expressions to manage UI events and perform deletion operations via the respective DAO.
 
 
 •	CustomersController, MonthlyApptsController, and WeeklyApptsController
 
  	Purpose: Display and manage listings of customers and appointments.
  
-  Key Functions: Populate JavaFX TableViews with data retrieved from the database, allowing users to view and interact with the information.
+  	Key Functions: Populate JavaFX TableViews with data retrieved from the database, allowing users to view and interact with the information.
 
 
 •	ReportsController
 
-  Purpose: Generates a report of the top 10 customers with the highest appointment counts for the current month.
+  	Purpose: Generates a report of the top 10 customers with the highest appointment counts for the current month.
  
-  Key Functions:
- 	Aggregates data through DBReports and DBAppointment.
- 	Displays the report in a TableView using a single lambda expression for processing the data.
+  	Key Functions:
+ 		Aggregates data through DBReports and DBAppointment.
+ 		Displays the report in a TableView using a single lambda expression for processing the data.
 
 ________________________________________
 
@@ -142,7 +142,7 @@ Model Classes
 
 •	Appointment, Customer, Contact, Country, FirstLevelDivision, User, MonthlyTypeCountReport, and VIPReport
  
-  Purpose: Represent the core business entities used throughout the application.
+  	Purpose: Represent the core business entities used throughout the application.
 
  	Key Functions:
  	Provide getters and setters for properties.
@@ -156,7 +156,7 @@ Utility Classes
 
 •	Logger
  
-  Purpose: Records application events and errors.
+  	Purpose: Records application events and errors.
 
 
 •	TimeControls
@@ -288,11 +288,11 @@ ________________________________________
 4.	Navigating the Application:
  	Once logged in, the main screen provides access to various features:
  
-  Manage appointments and customer records.
+  	Manage appointments and customer records.
  
-  Generate and view reports.
+  	Generate and view reports.
  
-  The application automatically handles alerts and localization based on system settings.
+  	The application automatically handles alerts and localization based on system settings.
 
 
 ________________________________________
