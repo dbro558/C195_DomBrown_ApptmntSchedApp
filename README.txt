@@ -8,11 +8,17 @@ The Internationalized Scheduling Application is a Java-based desktop application
 
 Key Features
 •	User Authentication: Provides a secure login using a username and password (default testing credentials: "test"/"test").
+
 •	Internationalization: Automatically detects the user’s system language and translates the login form (including error messages) between English and French using property files.
+
 •	Appointment Alerts: Monitors upcoming appointments and automatically alerts users if an appointment is scheduled within the next 15 minutes (based on the user’s local time).
+
 •	CRUD Operations: Enables users to create, read, update, and delete appointment and customer data via a graphical user interface.
+
 •	Time Zone Conversions: Handles time conversions among the user’s local time, Eastern Standard Time (for the consulting agency’s business hours), and Coordinated Universal Time (UTC) for database storage.
+
 •	Reports: Generates an additional report displaying the top 10 customers (by number of appointments) for the current month in descending order.
+
 •	Modern Java Features: Implements at least 28 lambda expressions spread across various controllers for enhanced readability and concise coding.
 
 ________________________________________
